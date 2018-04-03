@@ -16,7 +16,8 @@ const store = new Vuex.Store({
       red: '#e54f3a',
       black: '#2f313c',
       grey: '#d5d5d5'
-    }
+    },
+    tool: '',
   },
   mutations: {
     changeClearState(state,newClearState){
@@ -32,7 +33,10 @@ const store = new Vuex.Store({
       state.playersColor = newColor;
     },
     setLinesColor(state,newColor){
-      state.linesColor= newColor;
+      state.linesColor = newColor;
+    },
+    setTool(state,newTool){
+      state.tool = newTool;
     }
   }
 });

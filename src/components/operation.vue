@@ -63,7 +63,7 @@
 
 <script>
   export default {
-    name: 'header',
+    name: 'operation',
     data () {
       return {
 
@@ -83,7 +83,7 @@
           this.$store.commit('changeClearState','clear');
         }
       }
-    }
+    },
   }
 </script>
 
