@@ -5,6 +5,8 @@ export default class Selection{
     this.start = start;
     this.end = end;
     this.color = color;
+    this.diffX = 0;
+    this.diffY = 0;
   }
   draw(){
     let colorArr = [];
@@ -43,6 +45,63 @@ export default class Selection{
         this.ctx.closePath();
         this.ctx.fill();
         this.ctx.restore();
+        break;
+    }
+  }
+  inRange(x,y){
+    return this.start.x <= x && this.start.y <= y && this.end.y >= y && this.end.x >= x;
+  }
+  move(x,y){
+    let width = this.end.x - this.start.x;
+    let height = this.end.y - this.start.y;
+    let length = width > height ? height : width;
+    this.start.x = x - this.diffX;
+    this.start.y = y - this.diffY;
+    switch (this.type){
+      case 'square':
+        this.end.x = this.start.x + length;
+        this.end.y = this.start.y + length;
+        break;
+      case 'rectangle':
+        this.end.x = this.start.x + width;
+        this.end.y = this.start.y + height;
+        break;
+      case 'circular':
+        this.end.x = this.start.x + width;
+        this.end.y = this.start.y + height;
+        break;
+    }
+  }
+  drawEdges(){
+    this.ctx.strokeStyle = `rgb(69, 214, 149)`;
+    let width = this.end.x - this.start.x;
+    let height = this.end.y - this.start.y;
+    switch (this.type){
+      case 'square':
+        let length = width > height ? height : width;
+        this.ctx.strokeRect(this.start.x,this.start.y,length,length);
+        this.ctx.strokeRect(this.start.x - 4  ,this.start.y - 4,8,8);
+        this.ctx.strokeRect(this.start.x + length - 4  ,this.start.y - 4,8,8);
+        this.ctx.strokeRect(this.start.x - 4 ,this.start.y + height -4,8,8);
+        this.ctx.strokeRect(this.start.x + length - 4 ,this.start.y + height -4,8,8);
+        break;
+      case 'rectangle':
+        this.ctx.strokeRect(this.start.x,this.start.y,width,height);
+        this.ctx.strokeRect(this.start.x - 4  ,this.start.y - 4,8,8);
+        this.ctx.strokeRect(this.start.x + width - 4  ,this.start.y - 4,8,8);
+        this.ctx.strokeRect(this.start.x + width / 2 - 4  ,this.start.y - 4,8,8);
+        this.ctx.strokeRect(this.start.x - 4 ,this.start.y + height -4,8,8);
+        this.ctx.strokeRect(this.start.x + width / 2 - 4  ,this.start.y + height - 4,8,8);
+        this.ctx.strokeRect(this.start.x + width - 4 ,this.start.y + height -4,8,8);
+        break;
+      case 'circular':
+        this.ctx.strokeRect(this.start.x,this.start.y,width,height);
+        this.ctx.strokeRect(this.start.x - 4  ,this.start.y - 4,8,8);
+        this.ctx.strokeRect(this.start.x + width - 4  ,this.start.y - 4,8,8);
+        this.ctx.strokeRect(this.start.x + width / 2 - 4  ,this.start.y - 4,8,8);
+        this.ctx.strokeRect(this.start.x - 4 ,this.start.y + height -4,8,8);
+        this.ctx.strokeRect(this.start.x + width / 2 - 4  ,this.start.y + height - 4,8,8);
+        this.ctx.strokeRect(this.start.x + width - 4 ,this.start.y + height -4,8,8);
         break;
     }
   }

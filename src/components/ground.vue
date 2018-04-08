@@ -1,7 +1,7 @@
 <template>
   <div id="ground">
-    <div class="field">
-      <canvas id="canvas" ref="canvas" width="1000px" height="563px" @mousedown="canvasDown($event)"  @mousemove="canvasMove($event)" @mouseup="canvasUp($event)" @dragenter="dragEnter($event)" @dragover="dragOver($event)" @drop="dragFinished($event)"></canvas>
+    <div class="field" ref="field">
+      <canvas id="canvas" ref="canvas" width="1000px" height="563px" @click="canvasClick($event)" @mousedown="canvasDown($event)"  @mousemove="canvasMove($event)" @mouseup="canvasUp($event)" @dragenter="dragEnter($event)" @dragover="dragOver($event)" @drop="dragFinished($event)"></canvas>
       <input type="text" id="inputText" ref="inputText">
     </div>
   </div>
@@ -29,7 +29,8 @@
         mouseEnter:false,
         stack:[],
         imgWrap:[],
-        obj:{}
+        obj:{},
+        selectObj:{},
       }
     },
     computed:{
@@ -38,6 +39,9 @@
       },
       canvas(){
         return this.$refs.canvas;
+      },
+      field(){
+        return this.$refs.field;
       },
       inputText(){
         return this.$refs.inputText;
@@ -62,20 +66,41 @@
       },
       color(){
         return this.$store.state.color;
+      },
+      downloading(){
+        return this.$store.state.downloading;
       }
+
     },
     methods: {
       canvasDown(event){
         let canvas = this.canvas;
         this.start = this.canvasMousePos(canvas,event);
-        this.mouseDown = true;
+        if(this.tool){
+          this.mouseDown = true;
+        }else if(JSON.stringify(this.selectObj) === "{}"){
+          let ctx = canvas.getContext("2d");
+          let stack = this.stack;
+          ctx.clearRect(0, 0, this.width, this.height);
+          for(let obj of stack){
+            obj.draw();
+            if(obj.inRange(this.start.x,this.start.y)){
+              obj.drawEdges();
+              this.selectObj = obj;
+              if(obj instanceof Selection){
+                obj.diffX = this.start.x - obj.start.x;
+                obj.diffY = this.start.y - obj.start.y;
+              }
+            }
+          }
+        }
       },
       canvasMove(event){
         let mouseDown = this.mouseDown;
         let tool = this.tool;
+        let canvas = this.canvas;
+        let ctx = canvas.getContext("2d");
         if(mouseDown){
-          let canvas = this.canvas;
-          let ctx = canvas.getContext("2d");
           this.end = this.canvasMousePos(canvas,event);
           ctx.clearRect(0, 0, this.width, this.height);
           if(tool === 'square' || tool === 'rectangle' || tool === 'circular'){
@@ -89,12 +114,40 @@
             this.obj.draw();
             this.reDraw();
           }
+        }else if(JSON.stringify(this.selectObj) !== "{}"){
+          this.end = this.canvasMousePos(canvas,event);
+          let diffX = this.end.x -  this.start.x;
+          let diffY = this.end.y -  this.start.y;
+          if(this.selectObj instanceof Line){
+            this.selectObj.move(this.end.x - this.start.x, this.end.y - this.start.y);
+          }else {
+            this.selectObj.move(this.end.x,this.end.y);
+          }
+          ctx.clearRect(0, 0, this.width, this.height);
+          this.reDraw();
         }
       },
       canvasUp(){
         this.mouseDown = false;
-        this.stack.push(this.obj);
-        this.obj = {}
+        if(JSON.stringify(this.obj) !== "{}"){
+          this.obj.drawEdges();
+          this.stack.push(this.obj);
+          this.obj = {};
+          this.start = {
+            x : 0,
+            y : 0
+          };
+          this.end = {
+            x : 0,
+            y : 0
+          }
+        }else if(this.selectObj instanceof Line){
+          this.selectObj.cache.start.x = this.selectObj.start.x;
+          this.selectObj.cache.start.y = this.selectObj.start.y;
+          this.selectObj.cache.end.x = this.selectObj.end.x;
+          this.selectObj.cache.end.y = this.selectObj.end.y;
+          this.selectObj = {};
+        }
       },
       getScrollTop(){
         let scrollTop = 0;
@@ -127,11 +180,12 @@
         let allGraph = 'ball bigGate smallGate wheel railing stool column';
         let allIcon = 'point triangle ring halfRing halfTriangle halfCircular';
         this.end = this.canvasMousePos(canvas,event);
-        if(allGraph.indexOf(tool) > -1){
+        if(allGraph.indexOf(tool) > -1){this.end = this.canvasMousePos(canvas,event);
           this.obj = new Graph(ctx,tool,this.start,this.end);
           ctx.clearRect(0, 0, this.width, this.height);
-          this.obj.draw();
           this.reDraw();
+          this.obj.draw();
+          this.obj.drawEdges();
           this.stack.push(this.obj);
         }else if(allIcon.indexOf(tool) > -1){
           let color = '';
@@ -142,8 +196,9 @@
           }
           this.obj = new Icon(ctx,tool,this.start,this.end,color);
           ctx.clearRect(0, 0, this.width, this.height);
-          this.obj.draw();
           this.reDraw();
+          this.obj.draw();
+          this.obj.drawEdges();
           this.stack.push(this.obj);
         }else if(tool = 'text'){
           this.inputText.style.display = 'block';
@@ -159,18 +214,63 @@
               this.inputText.parentNode.style.position = '';
               this.obj = new Text(ctx,text,this.start,this.end);
               ctx.clearRect(0, 0, this.width, this.height);
-              this.obj.draw();
               this.reDraw();
+              this.obj.draw();
+              this.obj.drawEdges();
               this.stack.push(this.obj);
             }
           }
         }
+        this.$store.commit('setTool','');
+      },
+      canvasClick(event){
+//        let canvas = this.canvas;
+//        let ctx = canvas.getContext("2d");
+//        this.end = this.canvasMousePos(canvas,event);
+//        let stack = this.stack;
+//        ctx.clearRect(0, 0, this.width, this.height);
+//        for(let obj of stack){
+//          obj.draw();
+//          if(obj.inRange(this.end.x,this.end.y)){
+//            obj.drawEdges();
+//            this.selectObj = obj;
+//          }
+//        }
       },
       reDraw(){
         let stack = this.stack;
           for(let obj of stack){
               obj.draw();
           }
+      },
+      downImg() {
+        html2canvas( this.field, {
+          onrendered: function(canvas) {
+            let url = canvas.toDataURL();
+//            let img = new Image();
+//            img.src = url;
+//            document.body.appendChild(img);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = new Date() + ".png";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
+        });
+      }
+
+    },
+    watch:{
+      downloading(){
+//        let url = this.canvas.toDataURL();
+//        let a = document.createElement('a');
+//        a.href = url;
+//        a.download = new Date() + ".png";
+//        document.body.appendChild(a);
+//        a.click();
+//        document.body.removeChild(a);
+        this.downImg()
       }
     },
     mounted(){
@@ -210,6 +310,8 @@
     position: absolute;
     outline: none;
     opacity: 0.5;
+    width: 200px;
+    height: 20px;
     filter: alpha(opacity=50);
     padding-left: 10px;
     line-height: 20px;

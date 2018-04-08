@@ -56,7 +56,7 @@
       </div>
     </div>
     <div class="save">
-      <span>Save</span>
+      <span @click="download">Save</span>
     </div>
   </div>
 </template>
@@ -82,6 +82,9 @@
         }else if(clearState === 'delete'){
           this.$store.commit('changeClearState','clear');
         }
+      },
+      download(){
+        this.$store.commit('changeDownloading');
       }
     },
   }

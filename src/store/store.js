@@ -18,6 +18,7 @@ const store = new Vuex.Store({
       grey: '#d5d5d5'
     },
     tool: '',
+    downloading:false
   },
   mutations: {
     changeClearState(state,newClearState){
@@ -37,6 +38,9 @@ const store = new Vuex.Store({
     },
     setTool(state,newTool){
       state.tool = newTool;
+    },
+    changeDownloading(state){
+      state.downloading = ! state.downloading;
     }
   }
 });

@@ -101,4 +101,53 @@ export default class Icon{
         break;
     }
   }
+  inRange(x,y){
+    switch (this.type){
+      case 'point':
+        return (this.end.x - 4) <= x && (this.end.y - 4) <= y && (this.end.y + 4) >= y && (this.end.x + 4) >= x;
+        break;
+      case 'triangle':
+        return (this.end.x - 7) <= x && this.end.y <= y && (this.end.y + 18) >= y && (this.end.x + 7) >= x;
+        break;
+      case 'ring':
+        return (this.end.x - 10) <= x && (this.end.y - 10) <= y && (this.end.y + 10) >= y && (this.end.x + 10) >= x;
+        break;
+      case 'halfRing':
+        return (this.end.x - 10) <= x && (this.end.y - 10) <= y && (this.end.y + 10) >= y && (this.end.x + 10) >= x;
+        break;
+      case 'halfTriangle':
+        return (this.end.x - 7) <= x && this.end.y <= y && (this.end.y + 18) >= y && (this.end.x + 7) >= x;
+        break;
+      case 'halfCircular':
+        return (this.end.x - 10) <= x && (this.end.y - 10) <= y && (this.end.y + 10) >= y && (this.end.x + 10) >= x;
+        break;
+    }
+  }
+  move(x,y){
+    this.end.x = x;
+    this.end.y = y;
+  }
+  drawEdges(){
+    this.ctx.strokeStyle = `rgb(69, 214, 149)`;
+    switch (this.type){
+      case 'point':
+        this.ctx.strokeRect(this.end.x - 8,this.end.y - 8,16,16);
+        break;
+      case 'triangle':
+        this.ctx.strokeRect(this.end.x - 9,this.end.y - 2,18,22);
+        break;
+      case 'ring':
+        this.ctx.strokeRect(this.end.x - 12,this.end.y - 12,24,24);
+        break;
+      case 'halfRing':
+        this.ctx.strokeRect(this.end.x - 12,this.end.y - 12,24,24);
+        break;
+      case 'halfTriangle':
+        this.ctx.strokeRect(this.end.x - 9,this.end.y - 2,18,22);
+        break;
+      case 'halfCircular':
+        this.ctx.strokeRect(this.end.x - 12,this.end.y - 12,24,24);
+        break;
+    }
+  }
 }

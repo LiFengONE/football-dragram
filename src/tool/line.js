@@ -5,6 +5,18 @@ export default class Line{
     this.start = start;
     this.end = end;
     this.color = color;
+    this.cache = {
+      start: {
+        x: start.x,
+        y: start.y
+      },
+      end: {
+        x: end.x,
+        y: end.y
+      }
+    };
+    this.diffX = 0;
+    this.diffY = 0;
   }
   getArrow(start, end, beta, length) {
     let alpha = Math.atan2(end.y - start.y, end.x - start.x) * 180 / Math.PI;
@@ -56,6 +68,14 @@ export default class Line{
         this.ctx.restore();
         break;
     }
+    // this.ctx.beginPath();
+    // this.ctx.moveTo(this.start.x - 10, this.start.y );
+    // this.ctx.lineTo(this.start.x + 10, this.start.y );
+    // this.ctx.lineTo(this.end.x + 10, this.end.y );
+    // this.ctx.lineTo(this.end.x - 10, this.end.y );
+    // this.ctx.closePath();
+    // this.ctx.strokeStyle = `rgb(69, 214, 149)`;
+    // this.ctx.stroke();
   }
   drawArrow(x1, y1, x2, y2) {
     let endRadians = Math.atan((y2 - y1) / (x2 - x1));
@@ -70,5 +90,34 @@ export default class Line{
     this.ctx.closePath();
     this.ctx.fill();
     this.ctx.restore();
+  }
+  inRange(x,y){
+    let vs = [
+      [this.start.x - 10 ,this.start.y  ],
+      [ this.start.x + 10, this.start.y ],
+      [ this.end.x - 10,this.end.y ],
+      [this.end.x + 10,this.end.y ]
+    ];
+    let inside = false;
+    for (let i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+      let xi = vs[i][0], yi = vs[i][1];
+      let xj = vs[j][0], yj = vs[j][1];
+      let intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  }
+  move(diffX,diffY){
+    this.diffX = diffX;
+    this.diffY = diffY;
+    this.start.x = diffX + this.cache.start.x;
+    this.start.y = diffY + this.cache.start.y;
+    this.end.x = diffX + this.cache.end.x;
+    this.end.y = diffY + this.cache.end.y;
+  }
+  drawEdges(){
+    this.ctx.strokeStyle = `rgb(69, 214, 149)`;
+    this.ctx.strokeRect(this.start.x - 8,this.start.y - 8,16,16);
+    this.ctx.strokeRect(this.end.x - 8,this.end.y - 8,16,16);
   }
 }
