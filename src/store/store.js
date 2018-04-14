@@ -5,6 +5,11 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     clearState: 'clear',
+    hasGrid:false,
+    toClear : true,
+    toDelete : true,
+    toRotate : true,
+    isSelected:false,
     shapesColor: 'yellow',
     equipmentColor: 'yellow',
     playersColor: 'green',
@@ -41,6 +46,21 @@ const store = new Vuex.Store({
     },
     changeDownloading(state){
       state.downloading = ! state.downloading;
+    },
+    changeToClear(state){
+      state.toClear = ! state.toClear;
+    },
+    changeToDelete(state){
+      state.toDelete = ! state.toDelete;
+    },
+    changeToRotate(state){
+      state.toRotate = ! state.toRotate;
+    },
+    changeGirdState(state){
+      state.hasGrid = ! state.hasGrid;
+    },
+    changeSelectState(state,newState){
+      state.isSelected = newState;
     }
   }
 });

@@ -92,7 +92,7 @@
             </template>
           </span>
         </div>
-        <div class="tool-select-three">
+        <div class="tool-select-three hand">
           <span id="square" :class="theTool === 'square' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">
             <svg class="icon icon-M fill-undefined undefined">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-square">
@@ -218,7 +218,7 @@
             </template>
           </span>
         </div>
-        <div class="tool-select-three">
+        <div class="tool-select-three move">
           <span id="ball" @mouseover="getBorder($event)" @mouseout="removeBorder($event)" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
             <template v-if="graph !== 'ball'">
                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32"><!-- react-text: 678 -->
@@ -233,21 +233,26 @@
             </template>
           </span>
           <span id="point" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 32 32">
+            <template v-if="graph !== 'point'">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 32 32">
               <title>cone-small</title>
               <path :fill="color[equipmentColor]" d="M32 16c0 8.837-7.163 16-16 16s-16-7.163-16-16c0-8.837 7.163-16 16-16s16 7.163 16 16z"></path>
             </svg>
+            </template>
           </span>
           <span id="triangle" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 24 32">
+            <template v-if="graph !== 'triangle'">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 24 32">
               <title>cone-large</title>
               <path :fill="color[equipmentColor]" d="M12.226 0l12.226 31.059h-24.453l12.226-31.059z"></path>
             </svg>
+            </template>
           </span>
         </div>
-        <div class="tool-select-three">
+        <div class="tool-select-three move">
           <span id="bigGate" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="52" height="16" viewBox="0 0 104 32">
+            <template v-if="graph !== 'bigGate'">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="52" height="16" viewBox="0 0 104 32">
               <title>goal-large</title>
               <path d="M12 14c-1.105 0-2 0.895-2 2s0.895 2 2 2c1.105 0 2-0.895 2-2v0c0-1.105-0.895-2-2-2v0z"></path>
               <path d="M16 10c-1.105 0-2 0.895-2 2s0.895 2 2 2c1.105 0 2-0.895 2-2v0c0-1.105-0.895-2-2-2v0z"></path>
@@ -304,9 +309,11 @@
               <path d="M92 6c-1.105 0-2 0.895-2 2s0.895 2 2 2c1.105 0 2-0.895 2-2v0c0-1.105-0.895-2-2-2v0z"></path>
               <path d="M96 0h-88c-2.209 0-4 1.791-4 4v0 20c0 2.209-1.791 4-4 4v0 4h104v-4c-2.209 0-4-1.791-4-4v0-20c0-2.209-1.791-4-4-4v0zM8 28v-24h88v24z"></path>
             </svg>
+            </template>
           </span>
           <span id="smallGate" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="28" height="16" viewBox="0 0 56 32">
+            <template v-if="graph !== 'smallGate'">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="28" height="16" viewBox="0 0 56 32">
               <title>goal-small</title>
               <path d="M12 14h0.001c1.104 0 2 0.895 2 2v0.001c0 1.104-0.895 2-2 2h-0.001c-1.104 0-2-0.895-2-2v-0.001c0-1.104 0.895-2 2-2z"></path>
               <path d="M16 10h0.001c1.104 0 2 0.895 2 2v0.001c0 1.104-0.895 2-2 2h-0.001c-1.104 0-2-0.895-2-2v-0.001c0-1.104 0.895-2 2-2z"></path>
@@ -333,9 +340,11 @@
               <path d="M44 6h0.001c1.104 0 2 0.895 2 2v0.001c0 1.104-0.895 2-2 2h-0.001c-1.104 0-2-0.895-2-2v-0.001c0-1.104 0.895-2 2-2z"></path>
               <path d="M55.999 28v0c-2.209-0-3.999-1.791-3.999-4v-20c0-2.209-1.791-4-4-4v0h-39.999c-0 0-0 0-0.001 0-2.209 0-3.999 1.791-3.999 3.999 0 0 0 0.001 0 0.001v-0 20c0 2.209-1.791 4-4 4v0 4h55.999zM8 28v-24h39.999v24z"></path>
             </svg>
+            </template>
           </span>
           <span id="wheel" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="22" height="10" viewBox="0 0 77 32">
+             <template v-if="graph !== 'wheel'">
+               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="22" height="10" viewBox="0 0 77 32">
               <title>mannequin</title>
               <path fill="#fff" d="M25.596 17.597c0 2.651-2.149 4.799-4.799 4.799v0h-12.798c-2.651 0-4.799-2.149-4.799-4.799v0 0c0-2.651 2.149-4.799 4.799-4.799v0h12.798c2.651 0 4.799 2.149 4.799 4.799v0z"></path><!-- react-text: 915 -->
               <path fill="#fff" d="M71.989 15.998c0.008 0.115 0.012 0.249 0.012 0.385 0 3.046-2.24 5.568-5.162 6.010l-0.034 0.004h-10.43c-2.956-0.446-5.195-2.969-5.195-6.014 0-0.135 0.004-0.27 0.013-0.403l-0.001 0.018c-0.008-0.115-0.012-0.249-0.012-0.385 0-3.046 2.24-5.568 5.162-6.010l0.034-0.004h10.43c2.956 0.446 5.195 2.969 5.195 6.014 0 0.135-0.004 0.27-0.013 0.403l0.001-0.018z"></path><!-- react-text: 917 -->
@@ -343,11 +352,13 @@
               <path fill="#fff" d="M50.936 24.156c0.159-0.526 0.253-1.131 0.256-1.758v-12.8c-0.003-0.628-0.097-1.233-0.268-1.805l0.012 0.045c0.539 1.052 1.615 1.76 2.857 1.76 0.008 0 0.016-0 0.023-0h13.373c1.764 0.008 3.358 0.728 4.511 1.887l0 0c0.297 0.291 0.57 0.605 0.817 0.939l0.015 0.021c-0.263-0.368-0.536-0.692-0.833-0.993l0.001 0.001c-1.156-1.147-2.748-1.856-4.506-1.856-0.002 0-0.004 0-0.005 0h-12.798c-1.767 0-3.2 1.432-3.2 3.2v0 6.399c0 1.767 1.432 3.2 3.2 3.2v0h-0.576c-0.007-0-0.014-0-0.022-0-1.242 0-2.319 0.708-2.849 1.742l-0.008 0.018zM25.852 24.156c-0.539-1.052-1.615-1.76-2.857-1.76-0.008 0-0.016 0-0.023 0h-0.575c1.767 0 3.2-1.432 3.2-3.2v0 3.2c0.003 0.628 0.097 1.233 0.268 1.805l-0.012-0.045zM67.19 22.397c1.764-0.008 3.358-0.728 4.511-1.887l0-0c0.216-0.189 0.405-0.399 0.568-0.629l0.007-0.011c-0.171 0.241-0.36 0.451-0.572 0.636l-0.004 0.004c-1.153 1.16-2.747 1.88-4.51 1.888h-0.001zM9.599 22.397c-1.764-0.008-3.358-0.728-4.511-1.887l-0-0c-0.297-0.275-0.561-0.579-0.788-0.91l-0.012-0.018c0.264 0.356 0.526 0.669 0.805 0.965l-0.005-0.006c1.156 1.147 2.748 1.856 4.506 1.856 0.002 0 0.004 0 0.005 0h-0zM25.596 12.798c0-1.767-1.432-3.2-3.2-3.2v0h-12.798c-1.764 0.008-3.358 0.728-4.511 1.887l-0 0c-0.217 0.206-0.417 0.425-0.598 0.659l-0.010 0.013c0.191-0.247 0.39-0.466 0.605-0.669l0.003-0.003c1.153-1.16 2.747-1.88 4.51-1.888h13.375c0.007 0 0.014 0 0.022 0 1.242 0 2.319-0.708 2.849-1.742l0.008-0.018c-0.159 0.526-0.253 1.131-0.256 1.758v0.002zM31.995 3.2v0z"></path><!-- react-text: 921 -->
               <path fill="#2f313c" d="M44.793 0h-12.798c-4.143 0.012-7.668 2.647-9.002 6.332l-0.021 0.067h-13.374c-5.301 0-9.599 4.297-9.599 9.599s4.297 9.599 9.599 9.599v0h13.374c1.354 3.752 4.879 6.387 9.021 6.399h12.8c4.143-0.012 7.668-2.648 9.002-6.332l0.021-0.067h13.374c5.301 0 9.599-4.297 9.599-9.599s-4.297-9.599-9.599-9.599v0h-13.374c-1.354-3.752-4.879-6.387-9.021-6.399h-0.001zM31.995 25.596c-1.767 0-3.2-1.432-3.2-3.2v0-12.798c0-1.767 1.432-3.2 3.2-3.2v0h12.798c1.767 0 3.2 1.432 3.2 3.2v0 12.798c0 1.767-1.432 3.2-3.2 3.2v0zM54.392 19.197v-6.399h12.798c0.005-0 0.012-0 0.019-0 0.879 0 1.675 0.354 2.253 0.928l-0-0c0.585 0.58 0.946 1.384 0.946 2.272s-0.362 1.692-0.946 2.271l-0 0c-0.578 0.573-1.374 0.928-2.253 0.928-0.007 0-0.013-0-0.019-0h0.001zM9.599 19.197c-0.005 0-0.012 0-0.018 0-0.879 0-1.675-0.354-2.253-0.928l0 0c-0.585-0.58-0.946-1.384-0.946-2.272s0.362-1.692 0.946-2.271l0-0c0.578-0.573 1.374-0.928 2.253-0.928 0.007 0 0.013 0 0.020 0h12.797v6.399z"></path><!-- react-text: 923 -->
             </svg>
+             </template>
           </span>
         </div>
-        <div class="tool-select-three">
+        <div class="tool-select-three move">
           <span id="railing" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="44" height="14" viewBox="0 0 101 32">
+            <template v-if="graph !== 'railing'">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="44" height="14" viewBox="0 0 101 32">
               <title>ladder</title>
               <path fill="#2F313C" d="M0 27.429h100.571v4.571h-100.571v-4.571z"></path>
               <path fill="#2F313C" d="M0 0h100.571v4.571h-100.571v-4.571z"></path>
@@ -359,21 +370,26 @@
               <path fill="#2F313C" d="M75.429 4.571h4.571v22.857h-4.571v-22.857z"></path>
               <path fill="#2F313C" d="M89.143 4.571h4.571v22.857h-4.571v-22.857z"></path>
             </svg>
+            </template>
           </span>
           <span id="stool" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="6" viewBox="0 0 128 32">
+            <template v-if="graph !== 'stool'">
+               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="6" viewBox="0 0 128 32">
               <title>hurdle</title>
               <path d="M0 10.667h10.667v21.333h-10.667v-21.333z"></path>
               <path d="M117.333 10.667h10.667v21.333h-10.667v-21.333z"></path>
               <path d="M0 0h128v10.667h-128v-10.667z"></path>
             </svg>
+            </template>
           </span>
           <span id="column" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="8" height="25" viewBox="0 0 10 32">
+            <template v-if="graph !== 'column'">
+               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="8" height="25" viewBox="0 0 10 32">
               <title>slalom-pole</title>
               <path d="M3.84 0h2.56v32h-2.56v-32z"></path>
               <path d="M5.12 24.32l5.12 7.68h-10.24l5.12-7.68z"></path>
             </svg>
+            </template>
           </span>
         </div>
       </div>
@@ -470,36 +486,44 @@
             </template>
           </span>
         </div>
-        <div class="tool-select-two">
+        <div class="tool-select-two move">
           <span id="ring" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
+            <template v-if="graph !== 'ring'">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
               <title>player</title>
               <path fill="white" class="background" d="M30 16c0 7.732-6.268 14-14 14s-14-6.268-14-14c0-7.732 6.268-14 14-14s14 6.268 14 14z"></path>
               <path :fill="color[playersColor]" d="M16 4.8c6.186 0 11.2 5.014 11.2 11.2s-5.014 11.2-11.2 11.2c-6.186 0-11.2-5.014-11.2-11.2v0c0-6.186 5.014-11.2 11.2-11.2v0zM16 0c-8.837 0-16 7.163-16 16s7.163 16 16 16c8.837 0 16-7.163 16-16v0c0-8.837-7.163-16-16-16v0z"></path>
             </svg>
+            </template>
           </span>
           <span id="halfRing" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
+            <template v-if="graph !== 'halfRing'">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
               <title>goalkeeper</title>
               <path fill="white" class="background" d="M30 16c0 7.732-6.268 14-14 14s-14-6.268-14-14c0-7.732 6.268-14 14-14s14 6.268 14 14z"></path>
               <path :fill="color[playersColor]" d="M28.533 27.467c0.533 0.4 0.8 1.067 0.8 1.867 0 1.467-1.2 2.667-2.667 2.667-0.8 0-1.467-0.267-1.867-0.8-0.4-0.4-0.8-0.8-1.2-1.2-1.733-1.733-2.667-2.667-4-4 1.733-0.667 3.2-1.733 4.4-3.067 1.6-1.867 2.667-4.267 2.667-6.933 0-5.867-4.8-10.667-10.667-10.667s-10.667 4.8-10.667 10.667c0 2.667 1.067 5.067 2.667 6.933 1.2 1.333 2.667 2.4 4.533 3.067-1.333 1.333-2.267 2.267-4 4-0.4 0.4-0.667 0.667-1.2 1.2s-1.2 0.8-2 0.8c-1.467 0-2.667-1.2-2.667-2.667 0-0.8 0.267-1.467 0.8-1.867 0.267-0.267 0.533-0.533 0.667-0.667-2.533-2.933-4.133-6.667-4.133-10.8 0-8.8 7.2-16 16-16s16 7.2 16 16c0 4.133-1.6 7.867-4.133 10.8 0.133 0.133 0.4 0.4 0.667 0.667z"></path>
             </svg>
+            </template>
           </span>
         </div>
-        <div class="tool-select-two">
+        <div class="tool-select-two move">
           <span id="halfTriangle" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
+            <template v-if="graph !== 'halfTriangle'">
+               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
               <title>ussf-triangle-player</title>
               <path :fill="color[playersColor]" d="M32 32l-12-24h-8l-12 24h32z"></path>
               <path fill="#000" d="M16 0l-4 8h8l-4-8z"></path>
             </svg>
+            </template>
           </span>
           <span id="halfCircular" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
+            <template v-if="graph !== 'halfTriangle'">
+               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
               <title>ussf-circle-player</title>
               <path :fill="color[playersColor]" d="M29.84 8h-27.68c-1.358 2.302-2.16 5.071-2.16 8.028 0 8.837 7.163 16 16 16s16-7.163 16-16c0-2.957-0.802-5.727-2.201-8.103l0.041 0.075z"></path>
               <path fill="#000" d="M16 0c-5.885 0.006-11.025 3.188-13.799 7.925l-0.041 0.075h27.68c-2.815-4.812-7.955-7.994-13.839-8h-0.001z"></path>
             </svg>
+            </template>
           </span>
         </div>
       </div>
@@ -596,7 +620,7 @@
             </template>
           </span>
         </div>
-        <div class="tool-select-two">
+        <div class="tool-select-two hand">
           <span  id="solidArrowLine" :class="theTool === 'solidArrowLine' ? 'bgGreen' : 'bgWhite'" @click="changeTool($event)">
             <svg class="line icon-undefined fill-undefined undefined">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-line-with-arrow">
@@ -618,7 +642,7 @@
             </svg>
           </span>
         </div>
-        <div class="tool-select-two">
+        <div class="tool-select-two hand">
           <span id="waveLine" :class="theTool === 'waveLine' ? 'bgGreen' : 'bgWhite'" @click="changeTool($event)">
             <svg class="line icon-undefined fill-undefined undefined">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-wavy-line-with-arrow">
@@ -799,6 +823,16 @@
     padding-left: 10px;
     padding-right: 10px;
   }
+  .move{
+    span{
+      cursor:move
+    }
+  }
+  .hand{
+    span{
+      cursor:pointer;
+    }
+  }
   .icon{
     width: 24px;
     height: 24px;
@@ -808,15 +842,20 @@
     height: 15px;
   }
   .header{
+    cursor:pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #fafafa;
+    font-size: 12px;
     border-bottom: 1px solid #e7eaef;
     .text{
+      .title{
+        font-weight: 700;
+      }
       .description{
         color: #999;
-        font-weight: 500;
+        font-weight: bold;
       }
     }
     .fold{
@@ -832,6 +871,7 @@
     align-items: center;
     justify-content: space-between;
     span{
+      cursor:pointer;
       width: 28px;
       height: 20px;
       border-radius: 2px;
@@ -912,6 +952,7 @@
     align-items: center;
     height: 50px;
     span{
+      cursor:move;
       background-color: #fff;
       border: 1px solid #e7eaef;
       border-radius: 2px;

@@ -1,153 +1,161 @@
 export default class Icon{
-  constructor(ctx,type,start,end,color){
+  constructor(ctx,type,pos,color){
     this.ctx = ctx;
     this.type = type;
-    this.start = start;
-    this.end = end;
+    this.pos = pos;
     this.color = color;
+    this.width = 20;
+    this.height = 20;
+    this.angle = 0;
   }
   draw(){
-    let width = this.end.x - this.start.x;
-    let height = this.end.y - this.start.y;
+    this.ctx.save();
+    this.ctx.translate(this.pos.x,this.pos.y);
+    this.ctx.rotate(this.angle);
     switch (this.type){
       case 'point':
+        //this.width = 6;
+        //this.height = 6;
         this.ctx.beginPath();
-        this.ctx.arc(this.end.x, this.end.y, 4, 0, Math.PI*2, true);
+        this.ctx.arc(0, 0, 4, 0, Math.PI*2, true);
         this.ctx.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
         break;
       case 'triangle':
+        //this.width = 16;
+        //this.height = 20;
         this.ctx.beginPath();
-        this.ctx.moveTo(this.end.x,this.end.y);
-        this.ctx.lineTo(this.end.x - 7,this.end.y + 18);
-        this.ctx.lineTo(this.end.x + 7,this.end.y + 18);
+        this.ctx.moveTo(0, - 9);
+        this.ctx.lineTo( - 7, 9);
+        this.ctx.lineTo( 7, 9);
         this.ctx.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
         break;
       case 'ring':
+        //this.width = 12;
+        //this.height = 12;
         this.ctx.beginPath();
-        this.ctx.arc(this.end.x,this.end.y,10,0,Math.PI * 2,false);
+        this.ctx.arc(0 , 0, 10, 0,Math.PI * 2,false);
         this.ctx.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.arc(this.end.x,this.end.y,7,0,Math.PI * 2,false);
+        this.ctx.arc(0,0,7,0,Math.PI * 2,false);
         this.ctx.closePath();
         this.ctx.fillStyle = 'white';
         this.ctx.fill();
         break;
       case 'halfRing':
+        //this.width = 12;
+        //this.height = 12;
         this.ctx.beginPath();
-        this.ctx.arc(this.end.x,this.end.y,10,0,Math.PI * 2,false);
+        this.ctx.arc(0,0,10,0,Math.PI * 2,false);
         this.ctx.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.arc(this.end.x,this.end.y,7,0,Math.PI * 2,false);
-        this.ctx.arc(this.end.x,this.end.y,10,Math.PI / 3,Math.PI * 2 / 3,false);
+        this.ctx.arc(0,0,7,0,Math.PI * 2,false);
+        this.ctx.arc(0,0,10,Math.PI / 3,Math.PI * 2 / 3,false);
         this.ctx.closePath();
         this.ctx.fillStyle = 'white';
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.moveTo(this.end.x - 3.5,this.end.y + 6);
-        this.ctx.lineTo(this.end.x - 6.5,this.end.y + 9);
-        this.ctx.lineTo(this.end.x - 5,this.end.y + 11.5);
-        this.ctx.lineTo(this.end.x - 2,this.end.y + 7.5);
+        this.ctx.moveTo( - 3.5,  6);
+        this.ctx.lineTo( - 6.5, 9);
+        this.ctx.lineTo( - 5, 11.5);
+        this.ctx.lineTo( - 2, 7.5);
         this.ctx.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.moveTo(this.end.x + 3.5,this.end.y + 6);
-        this.ctx.lineTo(this.end.x + 6.5,this.end.y + 9);
-        this.ctx.lineTo(this.end.x + 5,this.end.y + 11.5);
-        this.ctx.lineTo(this.end.x + 2,this.end.y + 7.5);
+        this.ctx.moveTo( 3.5, 6);
+        this.ctx.lineTo( 6.5, 9);
+        this.ctx.lineTo( 5, 11.5);
+        this.ctx.lineTo( 2, 7.5);
         this.ctx.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
         this.ctx.fillStyle = 'black';
         this.ctx.font = "bold 28px"; //字体样式
-        this.ctx.fillText("GK", this.end.x - 6 , this.end.y + 5);
+        this.ctx.fillText("GK",  - 6 ,  5);
         break;
       case 'halfTriangle':
+        //this.width = 20;
+        //this.height = 20;
         this.ctx.beginPath();
-        this.ctx.moveTo(this.end.x,this.end.y );
-        this.ctx.lineTo(this.end.x - 10,this.end.y + 20);
-        this.ctx.lineTo(this.end.x + 10,this.end.y + 20);
+        this.ctx.moveTo(0, -10 );
+        this.ctx.lineTo( - 10, 10);
+        this.ctx.lineTo( 10, 10);
         this.ctx.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.moveTo(this.end.x,this.end.y );
-        this.ctx.lineTo(this.end.x - 3,this.end.y + 6);
-        this.ctx.lineTo(this.end.x + 3,this.end.y + 6);
+        this.ctx.moveTo(0,-10);
+        this.ctx.lineTo( -3, -4);
+        this.ctx.lineTo( 3, -4);
         this.ctx.closePath();
         this.ctx.fillStyle = 'black';
         this.ctx.fill();
         break;
       case 'halfCircular':
+        //this.width = 12;
+        //this.height = 12;
         this.ctx.beginPath();
-        this.ctx.arc(this.end.x,this.end.y,10,0,Math.PI * 2,false);
+        this.ctx.arc(0,0,10,0,Math.PI * 2,false);
         this.ctx.closePath();
         this.ctx.fillStyle = 'black';
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.arc(this.end.x,this.end.y,10,0,Math.PI * 7 / 6,false);
-        this.ctx.arc(this.end.x,this.end.y,10,Math.PI * 11 / 6,Math.PI * 2,false);
+        this.ctx.arc(0,0,10,0,Math.PI * 7 / 6,false);
+        this.ctx.arc(0,0,10,Math.PI * 11 / 6,Math.PI * 2,false);
         this.ctx.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
         break;
     }
+    this.ctx.restore();
   }
   inRange(x,y){
-    switch (this.type){
-      case 'point':
-        return (this.end.x - 4) <= x && (this.end.y - 4) <= y && (this.end.y + 4) >= y && (this.end.x + 4) >= x;
-        break;
-      case 'triangle':
-        return (this.end.x - 7) <= x && this.end.y <= y && (this.end.y + 18) >= y && (this.end.x + 7) >= x;
-        break;
-      case 'ring':
-        return (this.end.x - 10) <= x && (this.end.y - 10) <= y && (this.end.y + 10) >= y && (this.end.x + 10) >= x;
-        break;
-      case 'halfRing':
-        return (this.end.x - 10) <= x && (this.end.y - 10) <= y && (this.end.y + 10) >= y && (this.end.x + 10) >= x;
-        break;
-      case 'halfTriangle':
-        return (this.end.x - 7) <= x && this.end.y <= y && (this.end.y + 18) >= y && (this.end.x + 7) >= x;
-        break;
-      case 'halfCircular':
-        return (this.end.x - 10) <= x && (this.end.y - 10) <= y && (this.end.y + 10) >= y && (this.end.x + 10) >= x;
-        break;
+    let points = [
+      [this.pos.x - this.width / 2, this.pos.y - this.height / 2],
+      [this.pos.x + this.width / 2, this.pos.y - this.height / 2],
+      [this.pos.x + this.width / 2, this.pos.y + this.height / 2],
+      [this.pos.x - this.width / 2, this.pos.y + this.height / 2]
+    ];
+    let center = {
+      x: this.pos.x,
+      y: this.pos.y
+    };
+    for(let i = 0; i < points.length; i++){
+      let x = points[i][0];
+      let y = points[i][1];
+      points[i][0] = (x - center.x) * Math.cos(this.angle) + (y - center.y) * Math.sin(this.angle) + center.x;
+      points[i][1] = -(x - center.x) * Math.sin(this.angle) + (y - center.y) * Math.cos(this.angle) + center.y;
     }
+    let inside = false;
+    for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+      let xi = points[i][0], yi = points[i][1];
+      let xj = points[j][0], yj = points[j][1];
+      let intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+      if (intersect) inside = !inside;
+    }
+    return inside;
   }
   move(x,y){
-    this.end.x = x;
-    this.end.y = y;
+    this.pos.x = x;
+    this.pos.y = y;
+  }
+  rotateSelf(){
+    this.angle += Math.PI / 4;
   }
   drawEdges(){
+    this.ctx.save();
+    this.ctx.translate(this.pos.x,this.pos.y);
+    this.ctx.rotate(this.angle);
     this.ctx.strokeStyle = `rgb(69, 214, 149)`;
-    switch (this.type){
-      case 'point':
-        this.ctx.strokeRect(this.end.x - 8,this.end.y - 8,16,16);
-        break;
-      case 'triangle':
-        this.ctx.strokeRect(this.end.x - 9,this.end.y - 2,18,22);
-        break;
-      case 'ring':
-        this.ctx.strokeRect(this.end.x - 12,this.end.y - 12,24,24);
-        break;
-      case 'halfRing':
-        this.ctx.strokeRect(this.end.x - 12,this.end.y - 12,24,24);
-        break;
-      case 'halfTriangle':
-        this.ctx.strokeRect(this.end.x - 9,this.end.y - 2,18,22);
-        break;
-      case 'halfCircular':
-        this.ctx.strokeRect(this.end.x - 12,this.end.y - 12,24,24);
-        break;
-    }
+    this.ctx.strokeRect(- this.width / 2 , - this.height / 2 , this.width, this.height);
+    this.ctx.restore();
   }
 }

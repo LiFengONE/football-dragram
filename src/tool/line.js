@@ -39,9 +39,9 @@ export default class Line{
     this.ctx.lineWidth = 1;
     switch (this.type){
       case 'solidArrowLine':
+        this.ctx.save();
         this.ctx.beginPath();
         this.ctx.moveTo(this.start.x, this.start.y);
-        this.ctx.lineTo(this.end.x, this.end.y);
         this.ctx.lineTo(this.end.x, this.end.y);
         this.ctx.closePath();
         this.ctx.stroke();
@@ -49,6 +49,7 @@ export default class Line{
         this.drawArrow(this.start.x, this.start.y, this.end.x, this.end.y);
         break;
       case 'dottedArrowLine':
+        this.ctx.save();
         this.ctx.beginPath();
         this.ctx.moveTo(this.start.x, this.start.y);
         this.ctx.dashedLineTo(this.end.x, this.end.y);
@@ -58,8 +59,66 @@ export default class Line{
         this.drawArrow(this.start.x, this.start.y, this.end.x, this.end.y);
         break;
       case 'waveLine':
+        let width = this.end.x - this.start.x;
+        let height = this.end.y - this.start.y;
+        let alpha = Math.atan2(width, height);
+        //console.log(alpha);
+        let len = Math.sqrt(width * width + height * height);
+        this.ctx.save();
+        this.ctx.strokeStyle = 'black';
+        this.ctx.moveTo(this.start.x,this.start.y);
+        this.ctx.translate(this.start.x,this.start.y);
+        this.ctx.rotate(  Math.PI / 2 - alpha);
+        // this.ctx.beginPath();
+        // this.ctx.moveTo(0, 0);
+        // this.ctx.lineTo(0, 100);
+        // this.ctx.stroke();
+        // this.ctx.closePath();
+        let x = 0;
+        let y;
+        let i = 0;
+        let arr = [];
+        let lastPoint = [0,0];
+        while (x < len - 15){
+          let index = i % 4;
+          let firstMiddlePoint;
+          let secondMiddlePoint;
+          switch (index){
+            case 0:
+              y = 0;
+              firstMiddlePoint = [lastPoint[0] ,lastPoint[1] + 2.5];
+              secondMiddlePoint = [lastPoint[0] + 2.5 , lastPoint[1] + 5];
+              break;
+            case 1:
+              y = 5;
+              firstMiddlePoint = [lastPoint[0] + 2.5 ,lastPoint[1] + 5];
+              secondMiddlePoint = [lastPoint[0] + 5 , lastPoint[1] + 2.5];
+              break;
+            case 2:
+              y = 0;
+              firstMiddlePoint = [lastPoint[0]  ,lastPoint[1] - 2.5];
+              secondMiddlePoint = [lastPoint[0] + 2.5 , lastPoint[1] - 5];
+              break;
+            case 3:
+              y = -5;
+              firstMiddlePoint = [lastPoint[0] + 2.5 ,lastPoint[1] - 5];
+              secondMiddlePoint = [lastPoint[0] + 5 , lastPoint[1] - 2.5];
+              break;
+          }
+          this.ctx.beginPath();
+          this.ctx.moveTo(lastPoint[0],lastPoint[1]);
+          this.ctx.bezierCurveTo(firstMiddlePoint[0],firstMiddlePoint[1],secondMiddlePoint[0],secondMiddlePoint[1],x,y);
+          this.ctx.closePath();
+          this.ctx.stroke();
+          lastPoint = [x,y];
+          x += 5;
+          i ++;
+        }
+        this.ctx.restore();
+        this.drawArrow(this.start.x, this.start.y, this.end.x, this.end.y);
         break;
       case 'dottedLine':
+        this.ctx.save();
         this.ctx.beginPath();
         this.ctx.moveTo(this.start.x, this.start.y);
         this.ctx.dashedLineTo(this.end.x, this.end.y);
@@ -68,14 +127,6 @@ export default class Line{
         this.ctx.restore();
         break;
     }
-    // this.ctx.beginPath();
-    // this.ctx.moveTo(this.start.x - 10, this.start.y );
-    // this.ctx.lineTo(this.start.x + 10, this.start.y );
-    // this.ctx.lineTo(this.end.x + 10, this.end.y );
-    // this.ctx.lineTo(this.end.x - 10, this.end.y );
-    // this.ctx.closePath();
-    // this.ctx.strokeStyle = `rgb(69, 214, 149)`;
-    // this.ctx.stroke();
   }
   drawArrow(x1, y1, x2, y2) {
     let endRadians = Math.atan((y2 - y1) / (x2 - x1));

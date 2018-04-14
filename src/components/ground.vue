@@ -1,6 +1,6 @@
 <template>
   <div id="ground">
-    <div class="field" ref="field">
+    <div :class="['field', hasGrid ? 'hasGrid' : 'noGrid']" ref="field">
       <canvas id="canvas" ref="canvas" width="1000px" height="563px" @click="canvasClick($event)" @mousedown="canvasDown($event)"  @mousemove="canvasMove($event)" @mouseup="canvasUp($event)" @dragenter="dragEnter($event)" @dragover="dragOver($event)" @drop="dragFinished($event)"></canvas>
       <input type="text" id="inputText" ref="inputText">
     </div>
@@ -31,11 +31,15 @@
         imgWrap:[],
         obj:{},
         selectObj:{},
+        imgArr:[]
       }
     },
     computed:{
       tool(){
         return this.$store.state.tool;
+      },
+      hasGrid(){
+        return this.$store.state.hasGrid;
       },
       canvas(){
         return this.$refs.canvas;
@@ -69,29 +73,45 @@
       },
       downloading(){
         return this.$store.state.downloading;
+      },
+      toClear(){
+        return this.$store.state.toClear;
+      },
+      toDelete(){
+        return this.$store.state.toDelete;
+      },
+      toRotate(){
+        return this.$store.state.toRotate;
       }
-
     },
     methods: {
       canvasDown(event){
         let canvas = this.canvas;
-        this.start = this.canvasMousePos(canvas,event);
-        if(this.tool){
-          this.mouseDown = true;
-        }else if(JSON.stringify(this.selectObj) === "{}"){
-          let ctx = canvas.getContext("2d");
-          let stack = this.stack;
-          ctx.clearRect(0, 0, this.width, this.height);
-          for(let obj of stack){
-            obj.draw();
-            if(obj.inRange(this.start.x,this.start.y)){
-              obj.drawEdges();
-              this.selectObj = obj;
-              if(obj instanceof Selection){
-                obj.diffX = this.start.x - obj.start.x;
-                obj.diffY = this.start.y - obj.start.y;
-              }
-            }
+        this.start = this.end = this.canvasMousePos(canvas,event);
+        this.mouseDown = true;
+        let ctx = canvas.getContext("2d");
+        let stack = this.stack;
+        ctx.clearRect(0, 0, this.width, this.height);
+        let arr = [];
+        for(let obj of stack){
+          obj.draw();
+          if(obj.inRange(this.start.x,this.start.y)){
+            arr.push(obj);
+          }
+        }
+        if(arr.length === 0){
+          this.selectObj = {};
+          this.$store.commit('changeSelectState',false);
+        }else if(arr.length === 1){
+          arr[0].drawEdges();
+          this.selectObj = arr[0];
+          this.$store.commit('changeSelectState',true);
+          if(arr[0] instanceof Selection){
+            arr[0].diffStartX = this.start.x - arr[0].start.x;
+            arr[0].diffStartY = this.start.y - arr[0].start.y;
+            arr[0].diffEndX = arr[0].end.x  - this.start.x;
+            arr[0].diffEndY = arr[0].end.y - this.start.y;
+          }else if(arr[0] instanceof Icon){
           }
         }
       },
@@ -101,36 +121,38 @@
         let canvas = this.canvas;
         let ctx = canvas.getContext("2d");
         if(mouseDown){
-          this.end = this.canvasMousePos(canvas,event);
-          ctx.clearRect(0, 0, this.width, this.height);
-          if(tool === 'square' || tool === 'rectangle' || tool === 'circular'){
-            let selectionColor = this.color[this.shapesColor];
-            this.obj = new Selection(ctx,tool,this.start,this.end,selectionColor);
-            this.obj.draw();
+          if(this.tool){
+            this.end = this.canvasMousePos(canvas,event);
+            ctx.clearRect(0, 0, this.width, this.height);
+            if(tool === 'square' || tool === 'rectangle' || tool === 'circular'){
+              let selectionColor = this.color[this.shapesColor];
+              this.obj = new Selection(ctx,tool,this.start,this.end,selectionColor);
+              this.obj.draw();
+              this.obj.drawEdges();
+              this.reDraw();
+            }else if(tool === 'solidArrowLine' || tool === 'dottedArrowLine' || tool === 'waveLine' || tool === 'dottedLine'){
+              let lineColor = this.color[this.linesColor];
+              this.obj = new Line(ctx,tool,this.start,this.end,lineColor);
+              this.obj.draw();
+              this.obj.drawEdges();
+              this.reDraw();
+            }
+          }else if(JSON.stringify(this.selectObj) !== "{}"){
+            this.end = this.canvasMousePos(canvas,event);
+            if(this.selectObj instanceof Line){
+              this.selectObj.move(this.end.x - this.start.x, this.end.y - this.start.y);
+            }else {
+              this.selectObj.move(this.end.x,this.end.y);
+            }
+            ctx.clearRect(0, 0, this.width, this.height);
             this.reDraw();
-          }else if(tool === 'solidArrowLine' || tool === 'dottedArrowLine' || tool === 'waveLine' || tool === 'dottedLine'){
-            let lineColor = this.color[this.linesColor];
-            this.obj = new Line(ctx,tool,this.start,this.end,lineColor);
-            this.obj.draw();
-            this.reDraw();
+            this.selectObj.drawEdges();
           }
-        }else if(JSON.stringify(this.selectObj) !== "{}"){
-          this.end = this.canvasMousePos(canvas,event);
-          let diffX = this.end.x -  this.start.x;
-          let diffY = this.end.y -  this.start.y;
-          if(this.selectObj instanceof Line){
-            this.selectObj.move(this.end.x - this.start.x, this.end.y - this.start.y);
-          }else {
-            this.selectObj.move(this.end.x,this.end.y);
-          }
-          ctx.clearRect(0, 0, this.width, this.height);
-          this.reDraw();
         }
       },
       canvasUp(){
         this.mouseDown = false;
         if(JSON.stringify(this.obj) !== "{}"){
-          this.obj.drawEdges();
           this.stack.push(this.obj);
           this.obj = {};
           this.start = {
@@ -141,13 +163,19 @@
             x : 0,
             y : 0
           }
-        }else if(this.selectObj instanceof Line){
-          this.selectObj.cache.start.x = this.selectObj.start.x;
-          this.selectObj.cache.start.y = this.selectObj.start.y;
-          this.selectObj.cache.end.x = this.selectObj.end.x;
-          this.selectObj.cache.end.y = this.selectObj.end.y;
+        }else if(this.end.x !== this.start.x || this.end.y !== this.start.y){
           this.selectObj = {};
+          if(this.selectObj instanceof Line){
+            this.selectObj.cache.start.x = this.selectObj.start.x;
+            this.selectObj.cache.start.y = this.selectObj.start.y;
+            this.selectObj.cache.end.x = this.selectObj.end.x;
+            this.selectObj.cache.end.y = this.selectObj.end.y;
+          }
         }
+        console.log( this.selectObj)
+      },
+      canvasClick(event){
+
       },
       getScrollTop(){
         let scrollTop = 0;
@@ -180,8 +208,33 @@
         let allGraph = 'ball bigGate smallGate wheel railing stool column';
         let allIcon = 'point triangle ring halfRing halfTriangle halfCircular';
         this.end = this.canvasMousePos(canvas,event);
-        if(allGraph.indexOf(tool) > -1){this.end = this.canvasMousePos(canvas,event);
-          this.obj = new Graph(ctx,tool,this.start,this.end);
+        if(allGraph.indexOf(tool) > -1){
+          //this.end = this.canvasMousePos(canvas,event);
+          let img;
+          switch (tool){
+            case 'ball':
+              img = this.imgArr[0];
+              break;
+            case 'bigGate':
+              img = this.imgArr[1];
+              break;
+            case 'smallGate':
+              img = this.imgArr[2];
+              break;
+            case 'wheel':
+              img = this.imgArr[3];
+              break;
+            case 'railing':
+              img = this.imgArr[4];
+              break;
+            case 'stool':
+              img = this.imgArr[5];
+              break;
+            case 'column':
+              img = this.imgArr[6];
+              break;
+          }
+          this.obj = new Graph(ctx,tool,img,this.end);
           ctx.clearRect(0, 0, this.width, this.height);
           this.reDraw();
           this.obj.draw();
@@ -194,7 +247,7 @@
           }else if(tool === 'ring' || tool === 'halfRing' || tool === 'halfTriangle' || tool === 'halfCircular'){
             color =  this.color[this.playersColor];
           }
-          this.obj = new Icon(ctx,tool,this.start,this.end,color);
+          this.obj = new Icon(ctx,tool,this.end,color);
           ctx.clearRect(0, 0, this.width, this.height);
           this.reDraw();
           this.obj.draw();
@@ -222,20 +275,6 @@
           }
         }
         this.$store.commit('setTool','');
-      },
-      canvasClick(event){
-//        let canvas = this.canvas;
-//        let ctx = canvas.getContext("2d");
-//        this.end = this.canvasMousePos(canvas,event);
-//        let stack = this.stack;
-//        ctx.clearRect(0, 0, this.width, this.height);
-//        for(let obj of stack){
-//          obj.draw();
-//          if(obj.inRange(this.end.x,this.end.y)){
-//            obj.drawEdges();
-//            this.selectObj = obj;
-//          }
-//        }
       },
       reDraw(){
         let stack = this.stack;
@@ -271,10 +310,29 @@
 //        a.click();
 //        document.body.removeChild(a);
         this.downImg()
+      },
+      toClear(){
+        this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
+      },
+      toDelete(){
+        console.log(this.selectObj);
+        let index = this.stack.indexOf(this.selectObj);
+        this.stack.splice(index,1);
+        this.selectObj = {};
+        this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
+        this.reDraw();
+      },
+      toRotate(){
+        console.log(this.selectObj);
+        this.selectObj.rotateSelf();
+        this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
+        this.reDraw();
+        this.selectObj.drawEdges();
       }
     },
     mounted(){
-      let context = this.canvas.getContext("2d"),
+      let canvas = this.canvas;
+      let context = canvas.getContext("2d"),
         moveToFunction = CanvasRenderingContext2D.prototype.moveTo;
       CanvasRenderingContext2D.prototype.lastMoveToLocation = {};
       CanvasRenderingContext2D.prototype.moveTo = function(x, y) {
@@ -294,6 +352,19 @@
         }
         this.moveTo(x, y);
       };
+      let srcArr = [
+        '/static/img/ball.png',
+        '/static/img/bigGate.png',
+        '/static/img/smallGate.png',
+        '/static/img/wheel.png',
+        '/static/img/railing.png',
+        '/static/img/stool.png',
+        '/static/img/column.png',
+      ];
+      for(let i = 0; i < srcArr.length; i ++){
+        this.imgArr[i] = new Image();
+        this.imgArr[i].src = srcArr[i];
+      }
     }
   }
 </script>
@@ -321,10 +392,15 @@
     margin-top: 50px;
     width: 1000px;
     height: 563px;
-    background-image: url("../assets/footballField.png");
     background-repeat: no-repeat;
     background-size: 750px 500px;
     background-position: 125px 31px;
     border: dashed 2px rgb(69, 214, 149) ;
+  }
+  .hasGrid{
+    background-image: url("../assets/footballField2.png");
+  }
+  .noGrid{
+    background-image: url("../assets/footballField.png");
   }
 </style>
