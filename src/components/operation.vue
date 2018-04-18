@@ -82,6 +82,10 @@
           </div>
           <div class="text" @click="rotateObj">Rotate</div>
         </div>
+        <template v-if="playerText">
+          <label for="playerText"></label>
+          <input id="playerText" class="playerText" v-model="text"/>
+        </template>
       </template>
     </div>
     <div class="save">
@@ -95,7 +99,7 @@
     name: 'operation',
     data () {
       return {
-
+        hasBorder:false,
       }
     },
     computed:{
@@ -107,6 +111,17 @@
       },
       isSelected(){
         return this.$store.state.isSelected;
+      },
+      playerText(){
+        return this.$store.state.playerText;
+      },
+      text : {
+        get(){
+          return this.$store.state.text;
+        },
+        set(value){
+          this.$store.commit('setText',value);
+        }
       }
     },
     methods:{
@@ -124,6 +139,9 @@
       },
       rotateObj(){
         this.$store.commit('changeToRotate');
+      },
+      changePlayerText(){
+
       }
     },
   }
@@ -213,6 +231,24 @@
         background-color: #fff;
         border-color: #2f313c;
         color: #2f313c;
+      }
+    }
+    .playerText{
+      display: flex;
+      align-items: center;
+      border: 1px solid #e7eaef;
+      border-radius: 2px;
+      color: #2f313c;
+      width: 50px;
+      height: 36px;
+      margin-left: 10px;
+      padding: 0 10px;
+      background-color: #fafafa;
+      outline:none;
+      font-size: 15px;
+      font-weight: 400;
+      &:focus{
+        border-color: #45d695;
       }
     }
     .save{

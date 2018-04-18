@@ -82,6 +82,9 @@
       },
       toRotate(){
         return this.$store.state.toRotate;
+      },
+      text(){
+        return this.$store.state.text;
       }
     },
     methods: {
@@ -99,19 +102,51 @@
             arr.push(obj);
           }
         }
-        if(arr.length === 0){
+        let thisObj = {};
+        if(arr.length === 1){
+          thisObj = arr[0];
+        }else if(arr.length > 1){
+          let selectionArr = [];
+          let othersArr = [];
+          for(let obj of arr){
+            if(obj instanceof Selection){
+              selectionArr.push(obj);
+            }else {
+              othersArr.push(obj);
+            }
+          }
+          if(selectionArr.length !== 0 && othersArr.length === 1){
+            thisObj = othersArr[0];
+          }else if(othersArr.length === 0){
+            let widthSortedArr = selectionArr.sort(function (a,b) {
+              return a.width - b.width;
+            });
+            let heightSortedArr = selectionArr.sort(function (a,b) {
+              return a.height - b.height;
+            });
+            if(widthSortedArr[0] === heightSortedArr[0]){
+              thisObj = widthSortedArr[0];
+            }
+          }
+        }
+        if(JSON.stringify(thisObj) === "{}"){
           this.selectObj = {};
           this.$store.commit('changeSelectState',false);
-        }else if(arr.length === 1){
-          arr[0].drawEdges();
-          this.selectObj = arr[0];
+          this.$store.commit('changePlayerTextState',false);
+        }else {
           this.$store.commit('changeSelectState',true);
-          if(arr[0] instanceof Selection){
-            arr[0].diffStartX = this.start.x - arr[0].start.x;
-            arr[0].diffStartY = this.start.y - arr[0].start.y;
-            arr[0].diffEndX = arr[0].end.x  - this.start.x;
-            arr[0].diffEndY = arr[0].end.y - this.start.y;
-          }else if(arr[0] instanceof Icon){
+          thisObj.drawEdges();
+          this.selectObj = thisObj;
+          if(thisObj instanceof Selection){
+            thisObj.diffStartX = this.start.x - thisObj.start.x;
+            thisObj.diffStartY = this.start.y - thisObj.start.y;
+            thisObj.diffEndX = thisObj.end.x  - this.start.x;
+            thisObj.diffEndY = thisObj.end.y - this.start.y;
+          }else if(thisObj instanceof Text){
+            thisObj.diffX = this.start.x - thisObj.pos.x;
+            thisObj.diffY = this.start.y - thisObj.pos.y;
+          }else if(thisObj instanceof Icon && thisObj.type === 'halfRing'){
+            this.$store.commit('changePlayerTextState',true);
           }
         }
       },
@@ -164,7 +199,7 @@
             y : 0
           }
         }else if(this.end.x !== this.start.x || this.end.y !== this.start.y){
-          this.selectObj = {};
+          //this.selectObj = {};
           if(this.selectObj instanceof Line){
             this.selectObj.cache.start.x = this.selectObj.start.x;
             this.selectObj.cache.start.y = this.selectObj.start.y;
@@ -172,7 +207,7 @@
             this.selectObj.cache.end.y = this.selectObj.end.y;
           }
         }
-        console.log( this.selectObj)
+        console.log(this.selectObj)
       },
       canvasClick(event){
 
@@ -240,6 +275,11 @@
           this.obj.draw();
           this.obj.drawEdges();
           this.stack.push(this.obj);
+          this.selectObj = this.obj;
+          this.$store.commit('changeSelectState',true);
+          this.$store.commit('changePlayerTextState',false);
+          this.obj = {};
+          this.$store.commit('setTool','');
         }else if(allIcon.indexOf(tool) > -1){
           let color = '';
           if(tool === 'point' || tool === 'triangle'){
@@ -253,11 +293,18 @@
           this.obj.draw();
           this.obj.drawEdges();
           this.stack.push(this.obj);
+          this.selectObj = this.obj;
+          this.$store.commit('changeSelectState',true);
+          if(this.tool === 'halfRing'){
+            this.$store.commit('setText','GK');
+          }
+          this.obj = {};
+          this.$store.commit('setTool','');
         }else if(tool = 'text'){
           this.inputText.style.display = 'block';
           this.inputText.parentNode.style.position = 'relative';
           this.inputText.style.top = this.end.y  + 'px';
-          this.inputText.style.left = this.end.x  + 'px';
+          this.inputText.style.left = (this.end.x - 100)  + 'px';
           this.inputText.focus();
           document.onkeydown = (e) =>{
             if(e.keyCode === 13 ){
@@ -265,16 +312,21 @@
               this.inputText.style.display = 'none';
               this.inputText.value = '';
               this.inputText.parentNode.style.position = '';
-              this.obj = new Text(ctx,text,this.start,this.end);
+              this.obj = new Text(ctx,text,this.end);
               ctx.clearRect(0, 0, this.width, this.height);
               this.reDraw();
               this.obj.draw();
               this.obj.drawEdges();
               this.stack.push(this.obj);
+              this.selectObj = this.obj;
+              console.log(this.selectObj);
+              this.$store.commit('changeSelectState',true);
+              this.$store.commit('changePlayerTextState',false);
+              this.obj = {};
+              this.$store.commit('setTool','');
             }
           }
         }
-        this.$store.commit('setTool','');
       },
       reDraw(){
         let stack = this.stack;
@@ -288,7 +340,9 @@
             let url = canvas.toDataURL();
 //            let img = new Image();
 //            img.src = url;
-//            document.body.appendChild(img);
+//            img.onload = function () {
+//              document.body.appendChild(img);
+//            };
             let a = document.createElement('a');
             a.href = url;
             a.download = new Date() + ".png";
@@ -325,6 +379,13 @@
       toRotate(){
         console.log(this.selectObj);
         this.selectObj.rotateSelf();
+        this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
+        this.reDraw();
+        this.selectObj.drawEdges();
+      },
+      text(){
+        if(this.selectObj)
+        this.selectObj.text = this.text;
         this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
         this.reDraw();
         this.selectObj.drawEdges();

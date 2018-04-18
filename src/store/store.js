@@ -23,7 +23,9 @@ const store = new Vuex.Store({
       grey: '#d5d5d5'
     },
     tool: '',
-    downloading:false
+    downloading:false,
+    playerText:false,
+    text:'GK'
   },
   mutations: {
     changeClearState(state,newClearState){
@@ -61,6 +63,12 @@ const store = new Vuex.Store({
     },
     changeSelectState(state,newState){
       state.isSelected = newState;
+    },
+    changePlayerTextState(state,newState){
+      state.playerText = newState;
+    },
+    setText(state,newState){
+      state.text = newState;
     }
   }
 });

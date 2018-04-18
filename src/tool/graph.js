@@ -16,17 +16,6 @@ export default class Graph{
     this.ctx.rotate(this.angle);
     this.ctx.drawImage(this.img,- this.width / 2, - this.height / 2);
     this.ctx.restore();
-    // let img = new Image();
-    // img.src = `/static/img/${this.type}.png`;
-    // img.onload = ()=> {
-    //   this.width = img.width;
-    //   this.height = img.height;
-    //   this.ctx.save();
-    //   this.ctx.translate(this.pos.x,this.pos.y);
-    //   this.ctx.rotate(this.angle);
-    //   this.ctx.drawImage(img,- this.width / 2, - this.height / 2);
-    //   this.ctx.restore();
-    // };
   }
   inRange(x,y){
     let points = [

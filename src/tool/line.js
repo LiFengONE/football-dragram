@@ -62,22 +62,14 @@ export default class Line{
         let width = this.end.x - this.start.x;
         let height = this.end.y - this.start.y;
         let alpha = Math.atan2(width, height);
-        //console.log(alpha);
         let len = Math.sqrt(width * width + height * height);
         this.ctx.save();
-        this.ctx.strokeStyle = 'black';
         this.ctx.moveTo(this.start.x,this.start.y);
         this.ctx.translate(this.start.x,this.start.y);
         this.ctx.rotate(  Math.PI / 2 - alpha);
-        // this.ctx.beginPath();
-        // this.ctx.moveTo(0, 0);
-        // this.ctx.lineTo(0, 100);
-        // this.ctx.stroke();
-        // this.ctx.closePath();
         let x = 0;
         let y;
         let i = 0;
-        let arr = [];
         let lastPoint = [0,0];
         while (x < len - 15){
           let index = i % 4;

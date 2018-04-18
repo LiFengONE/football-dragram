@@ -117,22 +117,6 @@ export default class Selection{
     this.start.y = y - this.diffStartY;
     this.end.x = x + this.diffEndX;
     this.end.y = y + this.diffEndY;
-    // this.start.x = x - this.diffX;
-    // this.start.y = y - this.diffY;
-    // switch (this.type){
-    //   case 'square':
-    //     this.end.x = this.start.x + this.length;
-    //     this.end.y = this.start.y + this.length;
-    //     break;
-    //   case 'rectangle':
-    //     this.end.x = this.start.x + this.width;
-    //     this.end.y = this.start.y + this.height;
-    //     break;
-    //   case 'circular':
-    //     this.end.x = this.start.x + this.width;
-    //     this.end.y = this.start.y + this.height;
-    //     break;
-    // }
   }
   rotateSelf(){
     this.angle += Math.PI / 4;

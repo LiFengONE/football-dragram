@@ -7,6 +7,7 @@ export default class Icon{
     this.width = 20;
     this.height = 20;
     this.angle = 0;
+    this.text = 'GK';
   }
   draw(){
     this.ctx.save();
@@ -79,7 +80,7 @@ export default class Icon{
         this.ctx.fill();
         this.ctx.fillStyle = 'black';
         this.ctx.font = "bold 28px"; //字体样式
-        this.ctx.fillText("GK",  - 6 ,  5);
+        this.ctx.fillText(this.text,  - 6 ,  5);
         break;
       case 'halfTriangle':
         //this.width = 20;
