@@ -1,9 +1,9 @@
 <template>
   <div class="index">
-    <img src="../assets/header.png">
-    <operation></operation>
+    <!--<img src="../assets/header.png" id="header">-->
+    <!--<operation></operation>-->
     <div class="main">
-      <tools class="menu"></tools>
+      <!--<tools class="menu"></tools>-->
       <ground class="ground"></ground>
     </div>
   </div>

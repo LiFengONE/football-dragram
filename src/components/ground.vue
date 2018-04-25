@@ -1,6 +1,6 @@
 <template>
   <div id="ground">
-    <div :class="['field', hasGrid ? 'hasGrid' : 'noGrid']" ref="field">
+    <div :class="['field', hasGrid ? 'hasGrid' : 'noGrid']" ref="field" @click="downImg">
       <canvas id="canvas" ref="canvas" width="1000px" height="563px" @click="canvasClick($event)" @mousedown="canvasDown($event)"  @mousemove="canvasMove($event)" @mouseup="canvasUp($event)" @dragenter="dragEnter($event)" @dragover="dragOver($event)" @drop="dragFinished($event)"></canvas>
       <input type="text" id="inputText" ref="inputText">
     </div>
@@ -31,7 +31,8 @@
         imgWrap:[],
         obj:{},
         selectObj:{},
-        imgArr:[]
+        imgArr:[],
+        bgImg:{}
       }
     },
     computed:{
@@ -95,6 +96,7 @@
         let ctx = canvas.getContext("2d");
         let stack = this.stack;
         ctx.clearRect(0, 0, this.width, this.height);
+        this.drawBG();
         let arr = [];
         for(let obj of stack){
           obj.draw();
@@ -162,15 +164,15 @@
             if(tool === 'square' || tool === 'rectangle' || tool === 'circular'){
               let selectionColor = this.color[this.shapesColor];
               this.obj = new Selection(ctx,tool,this.start,this.end,selectionColor);
+              this.reDraw();
               this.obj.draw();
               this.obj.drawEdges();
-              this.reDraw();
             }else if(tool === 'solidArrowLine' || tool === 'dottedArrowLine' || tool === 'waveLine' || tool === 'dottedLine'){
               let lineColor = this.color[this.linesColor];
               this.obj = new Line(ctx,tool,this.start,this.end,lineColor);
+              this.reDraw();
               this.obj.draw();
               this.obj.drawEdges();
-              this.reDraw();
             }
           }else if(JSON.stringify(this.selectObj) !== "{}"){
             this.end = this.canvasMousePos(canvas,event);
@@ -329,6 +331,7 @@
         }
       },
       reDraw(){
+        this.drawBG();
         let stack = this.stack;
           for(let obj of stack){
               obj.draw();
@@ -336,13 +339,11 @@
       },
       downImg() {
         html2canvas( this.field, {
+          //allowTaint: true,
           onrendered: function(canvas) {
+//            let img_data1 = Canvas2Image.saveAsPNG(canvas, true).getAttribute('src');
+//            this.saveFile(img_data1, 'richer.png');
             let url = canvas.toDataURL();
-//            let img = new Image();
-//            img.src = url;
-//            img.onload = function () {
-//              document.body.appendChild(img);
-//            };
             let a = document.createElement('a');
             a.href = url;
             a.download = new Date() + ".png";
@@ -351,8 +352,20 @@
             document.body.removeChild(a);
           }
         });
+//        html2canvas(this.field)
+//          .then(function(canvas) {
+//            let url = canvas.toDataURL("image/jpeg");
+//            let a = document.createElement('a');
+//             a.href = url;
+//            a.download = new Date() + ".jpeg";
+//            document.body.appendChild(a);
+//           a.click();
+//           document.body.removeChild(a);
+//        });
+      },
+      drawBG(){
+        this.canvas.getContext("2d").drawImage(this.bgImg,100,100);
       }
-
     },
     watch:{
       downloading(){
@@ -363,7 +376,7 @@
 //        document.body.appendChild(a);
 //        a.click();
 //        document.body.removeChild(a);
-        this.downImg()
+        this.downImg();
       },
       toClear(){
         this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
@@ -426,13 +439,18 @@
         this.imgArr[i] = new Image();
         this.imgArr[i].src = srcArr[i];
       }
+      this.bgImg = new Image();
+      this.bgImg.src = '/static/img/footballField.png';
+      this.bgImg.onload = () =>{
+        this.drawBG();
+      };
     }
   }
 </script>
 
 <style lang="scss" scoped>
   #ground{
-    background-image: url("../assets/background.png");
+    //background-image: url("../assets/background.png");
     background-repeat: repeat;
     display: flex;
     justify-content: center;
@@ -459,9 +477,9 @@
     border: dashed 2px rgb(69, 214, 149) ;
   }
   .hasGrid{
-    background-image: url("../assets/footballField2.png");
+    //background-image: url("../assets/footballField2.png");
   }
   .noGrid{
-    background-image: url("../assets/footballField.png");
+    //background-image: url("../assets/footballField.png");
   }
 </style>
