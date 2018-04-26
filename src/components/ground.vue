@@ -1,7 +1,7 @@
 <template>
   <div id="ground">
-    <div :class="['field', hasGrid ? 'hasGrid' : 'noGrid']" ref="field" @click="downImg">
-      <canvas id="canvas" ref="canvas" width="1000px" height="563px" @click="canvasClick($event)" @mousedown="canvasDown($event)"  @mousemove="canvasMove($event)" @mouseup="canvasUp($event)" @dragenter="dragEnter($event)" @dragover="dragOver($event)" @drop="dragFinished($event)"></canvas>
+    <div :class="['field', hasGrid ? 'hasGrid' : 'noGrid']" ref="field">
+      <canvas id="canvas" ref="canvas" width="1000px" height="563px" @mousedown="canvasDown($event)"  @mousemove="canvasMove($event)" @mouseup="canvasUp($event)" @dragover="dragOver($event)" @drop="dragFinished($event)"></canvas>
       <input type="text" id="inputText" ref="inputText">
     </div>
   </div>
@@ -96,7 +96,6 @@
         let ctx = canvas.getContext("2d");
         let stack = this.stack;
         ctx.clearRect(0, 0, this.width, this.height);
-        this.drawBG();
         let arr = [];
         for(let obj of stack){
           obj.draw();
@@ -144,11 +143,15 @@
             thisObj.diffStartY = this.start.y - thisObj.start.y;
             thisObj.diffEndX = thisObj.end.x  - this.start.x;
             thisObj.diffEndY = thisObj.end.y - this.start.y;
+            this.$store.commit('changePlayerTextState',false);
           }else if(thisObj instanceof Text){
             thisObj.diffX = this.start.x - thisObj.pos.x;
             thisObj.diffY = this.start.y - thisObj.pos.y;
+            this.$store.commit('changePlayerTextState',false);
           }else if(thisObj instanceof Icon && thisObj.type === 'halfRing'){
             this.$store.commit('changePlayerTextState',true);
+          }else {
+            this.$store.commit('changePlayerTextState',false);
           }
         }
       },
@@ -164,15 +167,15 @@
             if(tool === 'square' || tool === 'rectangle' || tool === 'circular'){
               let selectionColor = this.color[this.shapesColor];
               this.obj = new Selection(ctx,tool,this.start,this.end,selectionColor);
-              this.reDraw();
               this.obj.draw();
               this.obj.drawEdges();
+              this.reDraw();
             }else if(tool === 'solidArrowLine' || tool === 'dottedArrowLine' || tool === 'waveLine' || tool === 'dottedLine'){
               let lineColor = this.color[this.linesColor];
               this.obj = new Line(ctx,tool,this.start,this.end,lineColor);
-              this.reDraw();
               this.obj.draw();
               this.obj.drawEdges();
+              this.reDraw();
             }
           }else if(JSON.stringify(this.selectObj) !== "{}"){
             this.end = this.canvasMousePos(canvas,event);
@@ -182,8 +185,8 @@
               this.selectObj.move(this.end.x,this.end.y);
             }
             ctx.clearRect(0, 0, this.width, this.height);
-            this.reDraw();
             this.selectObj.drawEdges();
+            this.reDraw();
           }
         }
       },
@@ -201,7 +204,6 @@
             y : 0
           }
         }else if(this.end.x !== this.start.x || this.end.y !== this.start.y){
-          //this.selectObj = {};
           if(this.selectObj instanceof Line){
             this.selectObj.cache.start.x = this.selectObj.start.x;
             this.selectObj.cache.start.y = this.selectObj.start.y;
@@ -209,10 +211,6 @@
             this.selectObj.cache.end.y = this.selectObj.end.y;
           }
         }
-        console.log(this.selectObj)
-      },
-      canvasClick(event){
-
       },
       getScrollTop(){
         let scrollTop = 0;
@@ -231,9 +229,6 @@
           y: y - canvas.offsetTop
         }
       },
-      dragEnter(event){
-
-      },
       dragOver(event){
         event.preventDefault();
       },
@@ -246,7 +241,6 @@
         let allIcon = 'point triangle ring halfRing halfTriangle halfCircular';
         this.end = this.canvasMousePos(canvas,event);
         if(allGraph.indexOf(tool) > -1){
-          //this.end = this.canvasMousePos(canvas,event);
           let img;
           switch (tool){
             case 'ball':
@@ -273,9 +267,9 @@
           }
           this.obj = new Graph(ctx,tool,img,this.end);
           ctx.clearRect(0, 0, this.width, this.height);
-          this.reDraw();
           this.obj.draw();
           this.obj.drawEdges();
+          this.reDraw();
           this.stack.push(this.obj);
           this.selectObj = this.obj;
           this.$store.commit('changeSelectState',true);
@@ -291,14 +285,17 @@
           }
           this.obj = new Icon(ctx,tool,this.end,color);
           ctx.clearRect(0, 0, this.width, this.height);
-          this.reDraw();
           this.obj.draw();
           this.obj.drawEdges();
+          this.reDraw();
           this.stack.push(this.obj);
           this.selectObj = this.obj;
           this.$store.commit('changeSelectState',true);
           if(this.tool === 'halfRing'){
+            this.$store.commit('changePlayerTextState',true);
             this.$store.commit('setText','GK');
+          }else {
+            this.$store.commit('changePlayerTextState',false);
           }
           this.obj = {};
           this.$store.commit('setTool','');
@@ -316,9 +313,9 @@
               this.inputText.parentNode.style.position = '';
               this.obj = new Text(ctx,text,this.end);
               ctx.clearRect(0, 0, this.width, this.height);
-              this.reDraw();
               this.obj.draw();
               this.obj.drawEdges();
+              this.reDraw();
               this.stack.push(this.obj);
               this.selectObj = this.obj;
               console.log(this.selectObj);
@@ -331,7 +328,6 @@
         }
       },
       reDraw(){
-        this.drawBG();
         let stack = this.stack;
           for(let obj of stack){
               obj.draw();
@@ -339,10 +335,7 @@
       },
       downImg() {
         html2canvas( this.field, {
-          //allowTaint: true,
           onrendered: function(canvas) {
-//            let img_data1 = Canvas2Image.saveAsPNG(canvas, true).getAttribute('src');
-//            this.saveFile(img_data1, 'richer.png');
             let url = canvas.toDataURL();
             let a = document.createElement('a');
             a.href = url;
@@ -352,30 +345,10 @@
             document.body.removeChild(a);
           }
         });
-//        html2canvas(this.field)
-//          .then(function(canvas) {
-//            let url = canvas.toDataURL("image/jpeg");
-//            let a = document.createElement('a');
-//             a.href = url;
-//            a.download = new Date() + ".jpeg";
-//            document.body.appendChild(a);
-//           a.click();
-//           document.body.removeChild(a);
-//        });
       },
-      drawBG(){
-        this.canvas.getContext("2d").drawImage(this.bgImg,100,100);
-      }
     },
     watch:{
       downloading(){
-//        let url = this.canvas.toDataURL();
-//        let a = document.createElement('a');
-//        a.href = url;
-//        a.download = new Date() + ".png";
-//        document.body.appendChild(a);
-//        a.click();
-//        document.body.removeChild(a);
         this.downImg();
       },
       toClear(){
@@ -393,39 +366,18 @@
         console.log(this.selectObj);
         this.selectObj.rotateSelf();
         this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
-        this.reDraw();
         this.selectObj.drawEdges();
+        this.reDraw();
       },
       text(){
         if(this.selectObj)
         this.selectObj.text = this.text;
         this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
-        this.reDraw();
         this.selectObj.drawEdges();
+        this.reDraw();
       }
     },
     mounted(){
-      let canvas = this.canvas;
-      let context = canvas.getContext("2d"),
-        moveToFunction = CanvasRenderingContext2D.prototype.moveTo;
-      CanvasRenderingContext2D.prototype.lastMoveToLocation = {};
-      CanvasRenderingContext2D.prototype.moveTo = function(x, y) {
-        moveToFunction.apply(context, [x, y]);
-        this.lastMoveToLocation.x = x;
-        this.lastMoveToLocation.y = y;
-      };
-      CanvasRenderingContext2D.prototype.dashedLineTo = function(x, y, dashLength) {
-        dashLength = dashLength === undefined ? 3 : dashLength;
-        let startX = this.lastMoveToLocation.x;
-        let startY = this.lastMoveToLocation.y;
-        let deltaX = x - startX;
-        let deltaY = y - startY;
-        let numDashes = Math.floor(Math.sqrt(deltaX * deltaX + deltaY * deltaY) / dashLength);
-        for (let i = 0; i < numDashes; ++i) {
-          this[i % 2 === 0 ? 'moveTo' : 'lineTo'](startX + (deltaX / numDashes) * i, startY + (deltaY / numDashes) * i);
-        }
-        this.moveTo(x, y);
-      };
       let srcArr = [
         '/static/img/ball.png',
         '/static/img/bigGate.png',
@@ -439,18 +391,13 @@
         this.imgArr[i] = new Image();
         this.imgArr[i].src = srcArr[i];
       }
-      this.bgImg = new Image();
-      this.bgImg.src = '/static/img/footballField.png';
-      this.bgImg.onload = () =>{
-        this.drawBG();
-      };
     }
   }
 </script>
 
 <style lang="scss" scoped>
   #ground{
-    //background-image: url("../assets/background.png");
+    background-image: url("../assets/background.png");
     background-repeat: repeat;
     display: flex;
     justify-content: center;
@@ -477,9 +424,9 @@
     border: dashed 2px rgb(69, 214, 149) ;
   }
   .hasGrid{
-    //background-image: url("../assets/footballField2.png");
+    background-image: url("../assets/footballField2.png");
   }
   .noGrid{
-    //background-image: url("../assets/footballField.png");
+    background-image: url("../assets/footballField.png");
   }
 </style>

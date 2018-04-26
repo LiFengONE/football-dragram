@@ -1,10 +1,10 @@
 <template>
   <div class="index">
-    <!--<img src="../assets/header.png" id="header">-->
-    <!--<operation></operation>-->
+    <img src="../assets/header.png">
+    <operation></operation>
     <div class="main">
-      <!--<tools class="menu"></tools>-->
-      <ground class="ground"></ground>
+      <tools class="menu"></tools>
+      <ground class="ground" ref="ground"></ground>
     </div>
   </div>
 </template>
@@ -22,7 +22,6 @@
     },
     data () {
       return {
-
       }
     }
   }

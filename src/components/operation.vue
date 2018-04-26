@@ -139,11 +139,8 @@
       },
       rotateObj(){
         this.$store.commit('changeToRotate');
-      },
-      changePlayerText(){
-
       }
-    },
+    }
   }
 </script>
 

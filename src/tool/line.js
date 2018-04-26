@@ -51,8 +51,9 @@ export default class Line{
       case 'dottedArrowLine':
         this.ctx.save();
         this.ctx.beginPath();
+        this.ctx.setLineDash([5,6]);
         this.ctx.moveTo(this.start.x, this.start.y);
-        this.ctx.dashedLineTo(this.end.x, this.end.y);
+        this.ctx.lineTo(this.end.x, this.end.y);
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.restore();
@@ -112,8 +113,9 @@ export default class Line{
       case 'dottedLine':
         this.ctx.save();
         this.ctx.beginPath();
+        this.ctx.setLineDash([5,6]);
         this.ctx.moveTo(this.start.x, this.start.y);
-        this.ctx.dashedLineTo(this.end.x, this.end.y);
+        this.ctx.lineTo(this.end.x, this.end.y);
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.restore();
