@@ -25,7 +25,9 @@ const store = new Vuex.Store({
     tool: '',
     downloading:false,
     playerText:false,
-    text:'GK'
+    text:'',
+    isLine:false,
+    isPlayer:false
   },
   mutations: {
     changeClearState(state,newClearState){
@@ -69,7 +71,14 @@ const store = new Vuex.Store({
     },
     setText(state,newState){
       state.text = newState;
+    },
+    changeIsLineState(state,newState){
+      state.isLine = newState;
+    },
+    changeIsPlayerState(state,newState){
+      state.isPlayer = newState;
     }
+
   }
 });
 

@@ -7,7 +7,7 @@ export default class Icon{
     this.width = 20;
     this.height = 20;
     this.angle = 0;
-    this.text = 'GK';
+    this.text = '';
   }
   draw(){
     this.ctx.save();
@@ -47,6 +47,9 @@ export default class Icon{
         this.ctx.closePath();
         this.ctx.fillStyle = 'white';
         this.ctx.fill();
+        this.ctx.fillStyle = 'black';
+        this.ctx.font = "bold 28px"; //字体样式
+        this.ctx.fillText(this.text,  - 6 ,  5);
         break;
       case 'halfRing':
         //this.width = 12;
@@ -99,6 +102,9 @@ export default class Icon{
         this.ctx.closePath();
         this.ctx.fillStyle = 'black';
         this.ctx.fill();
+        this.ctx.fillStyle = 'black';
+        this.ctx.font = "bold 28px"; //字体样式
+        this.ctx.fillText(this.text,  - 6 ,  5);
         break;
       case 'halfCircular':
         //this.width = 12;
@@ -114,6 +120,9 @@ export default class Icon{
         this.ctx.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
+        this.ctx.fillStyle = 'black';
+        this.ctx.font = "bold 28px"; //字体样式
+        this.ctx.fillText(this.text,  - 6 ,  5);
         break;
     }
     this.ctx.restore();

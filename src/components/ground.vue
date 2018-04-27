@@ -134,6 +134,7 @@
           this.selectObj = {};
           this.$store.commit('changeSelectState',false);
           this.$store.commit('changePlayerTextState',false);
+          this.$store.commit('changeIsLineState',false);
         }else {
           this.$store.commit('changeSelectState',true);
           thisObj.drawEdges();
@@ -144,14 +145,25 @@
             thisObj.diffEndX = thisObj.end.x  - this.start.x;
             thisObj.diffEndY = thisObj.end.y - this.start.y;
             this.$store.commit('changePlayerTextState',false);
+            this.$store.commit('changeIsLineState',false);
           }else if(thisObj instanceof Text){
             thisObj.diffX = this.start.x - thisObj.pos.x;
             thisObj.diffY = this.start.y - thisObj.pos.y;
             this.$store.commit('changePlayerTextState',false);
-          }else if(thisObj instanceof Icon && thisObj.type === 'halfRing'){
+            this.$store.commit('changeIsLineState',false);
+          }else if(thisObj instanceof Icon){
             this.$store.commit('changePlayerTextState',true);
-          }else {
+            this.$store.commit('changeIsLineState',false);
+            if(thisObj.type === 'ring' || thisObj.type === 'halfTriangle' || thisObj.type === 'halfCircular'){
+              //this.$store.commit('setText','Label');
+            }else if(thisObj.type === 'halfRing'){
+              //this.$store.commit('setText','GK');
+            }
+          }else if(thisObj instanceof Line){
+            this.$store.commit('changeIsLineState',true);
+          } else {
             this.$store.commit('changePlayerTextState',false);
+            this.$store.commit('changeIsLineState',false);
           }
         }
       },
@@ -284,6 +296,13 @@
             color =  this.color[this.playersColor];
           }
           this.obj = new Icon(ctx,tool,this.end,color);
+          if(this.tool === 'halfRing'){
+            this.$store.commit('setText','GK');
+            //this.obj.text = 'GK';
+          }else {
+            //this.$store.commit('setText','Label');
+            this.obj.text = '';
+          }
           ctx.clearRect(0, 0, this.width, this.height);
           this.obj.draw();
           this.obj.drawEdges();
@@ -291,12 +310,7 @@
           this.stack.push(this.obj);
           this.selectObj = this.obj;
           this.$store.commit('changeSelectState',true);
-          if(this.tool === 'halfRing'){
-            this.$store.commit('changePlayerTextState',true);
-            this.$store.commit('setText','GK');
-          }else {
-            this.$store.commit('changePlayerTextState',false);
-          }
+          this.$store.commit('changePlayerTextState',true);
           this.obj = {};
           this.$store.commit('setTool','');
         }else if(tool = 'text'){
@@ -363,18 +377,18 @@
         this.reDraw();
       },
       toRotate(){
-        console.log(this.selectObj);
         this.selectObj.rotateSelf();
         this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
         this.selectObj.drawEdges();
         this.reDraw();
       },
       text(){
-        if(this.selectObj)
-        this.selectObj.text = this.text;
-        this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
-        this.selectObj.drawEdges();
-        this.reDraw();
+        if(this.selectObj instanceof Icon){
+          this.selectObj.text = this.text;
+          this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
+          this.selectObj.drawEdges();
+          this.reDraw();
+        }
       }
     },
     mounted(){

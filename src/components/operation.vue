@@ -69,7 +69,7 @@
           </div>
           <div class="text" @click="deleteObj">Delete</div>
         </div>
-        <div class="rotate">
+        <div class="rotate" v-show="! isLine">
           <div class="theIcon" @click="rotateObj">
             <svg class="icon icon-M fill-undefined undefined">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-rotate">
@@ -84,7 +84,7 @@
         </div>
         <template v-if="playerText">
           <label for="playerText"></label>
-          <input id="playerText" class="playerText" v-model="text"/>
+          <input id="playerText" class="playerText" v-model="text" ref="input" />
         </template>
       </template>
     </div>
@@ -115,12 +115,30 @@
       playerText(){
         return this.$store.state.playerText;
       },
+      isLine(){
+        return this.$store.state.isLine;
+      },
+      isPlayer(){
+        return this.$store.state.isPlayer;
+      },
       text : {
         get(){
           return this.$store.state.text;
         },
         set(value){
-          this.$store.commit('setText',value);
+          if(this.$store.state.isPlayer){
+            this.$refs.input.placeholder = '';
+            this.$store.commit('setText',value);
+          }else {
+            this.$refs.input.placeholder = 'Label';
+            this.$refs.input.maxLength = 2;
+            if(value.length === 0){
+              //this.$store.commit('setText','');
+            } else if(value.length > 2){
+              value = value.slice(0,2);
+            }
+            this.$store.commit('setText',value);
+          }
         }
       }
     },

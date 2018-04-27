@@ -36,7 +36,7 @@ export default class Line{
   draw(){
     this.ctx.strokeStyle = this.color;
     this.ctx.fillStyle = this.color;
-    this.ctx.lineWidth = 1;
+    this.ctx.lineWidth = 2;
     switch (this.type){
       case 'solidArrowLine':
         this.ctx.save();
@@ -68,45 +68,17 @@ export default class Line{
         this.ctx.moveTo(this.start.x,this.start.y);
         this.ctx.translate(this.start.x,this.start.y);
         this.ctx.rotate(  Math.PI / 2 - alpha);
+        this.ctx.beginPath();
         let x = 0;
-        let y;
-        let i = 0;
-        let lastPoint = [0,0];
-        while (x < len - 15){
-          let index = i % 4;
-          let firstMiddlePoint;
-          let secondMiddlePoint;
-          switch (index){
-            case 0:
-              y = 0;
-              firstMiddlePoint = [lastPoint[0] ,lastPoint[1] + 2.5];
-              secondMiddlePoint = [lastPoint[0] + 2.5 , lastPoint[1] + 5];
-              break;
-            case 1:
-              y = 5;
-              firstMiddlePoint = [lastPoint[0] + 2.5 ,lastPoint[1] + 5];
-              secondMiddlePoint = [lastPoint[0] + 5 , lastPoint[1] + 2.5];
-              break;
-            case 2:
-              y = 0;
-              firstMiddlePoint = [lastPoint[0]  ,lastPoint[1] - 2.5];
-              secondMiddlePoint = [lastPoint[0] + 2.5 , lastPoint[1] - 5];
-              break;
-            case 3:
-              y = -5;
-              firstMiddlePoint = [lastPoint[0] + 2.5 ,lastPoint[1] - 5];
-              secondMiddlePoint = [lastPoint[0] + 5 , lastPoint[1] - 2.5];
-              break;
-          }
-          this.ctx.beginPath();
-          this.ctx.moveTo(lastPoint[0],lastPoint[1]);
-          this.ctx.bezierCurveTo(firstMiddlePoint[0],firstMiddlePoint[1],secondMiddlePoint[0],secondMiddlePoint[1],x,y);
-          this.ctx.closePath();
-          this.ctx.stroke();
-          lastPoint = [x,y];
-          x += 5;
-          i ++;
+        let y = 0;
+        let amplitude = 5;
+        let frequency = 5;
+        while (x < len - 20) {
+          y = amplitude * Math.sin(x / frequency);
+          this.ctx.lineTo(x, y);
+          x = x + 1;
         }
+        this.ctx.stroke();
         this.ctx.restore();
         this.drawArrow(this.start.x, this.start.y, this.end.x, this.end.y);
         break;
