@@ -84,7 +84,7 @@
         </div>
         <template v-if="playerText">
           <label for="playerText"></label>
-          <input id="playerText" class="playerText" v-model="text" ref="input" />
+          <input id="playerText" class="playerText" v-model="text" ref="input" :placeholder="isPlayer ? '' : 'Label'" :maxlength="isPlayer ? 10 : 2" />
         </template>
       </template>
     </div>
@@ -126,19 +126,7 @@
           return this.$store.state.text;
         },
         set(value){
-          if(this.$store.state.isPlayer){
-            this.$refs.input.placeholder = '';
-            this.$store.commit('setText',value);
-          }else {
-            this.$refs.input.placeholder = 'Label';
-            this.$refs.input.maxLength = 2;
-            if(value.length === 0){
-              //this.$store.commit('setText','');
-            } else if(value.length > 2){
-              value = value.slice(0,2);
-            }
-            this.$store.commit('setText',value);
-          }
+          this.$store.commit('setText',value);
         }
       }
     },

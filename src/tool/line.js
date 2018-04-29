@@ -110,10 +110,10 @@ export default class Line{
   }
   inRange(x,y){
     let vs = [
-      [this.start.x - 10 ,this.start.y  ],
-      [ this.start.x + 10, this.start.y ],
-      [ this.end.x - 10,this.end.y ],
-      [this.end.x + 10,this.end.y ]
+      [this.start.x - 20 ,this.start.y  ],
+      [ this.start.x + 20, this.start.y ],
+      [ this.end.x - 20,this.end.y ],
+      [this.end.x + 20,this.end.y ]
     ];
     let inside = false;
     for (let i = 0, j = vs.length - 1; i < vs.length; j = i++) {

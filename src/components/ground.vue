@@ -152,12 +152,16 @@
             this.$store.commit('changePlayerTextState',false);
             this.$store.commit('changeIsLineState',false);
           }else if(thisObj instanceof Icon){
-            this.$store.commit('changePlayerTextState',true);
             this.$store.commit('changeIsLineState',false);
+            this.$store.commit('setText',thisObj.text);
             if(thisObj.type === 'ring' || thisObj.type === 'halfTriangle' || thisObj.type === 'halfCircular'){
-              //this.$store.commit('setText','Label');
+              this.$store.commit('changeIsPlayerState',false);
+              this.$store.commit('changePlayerTextState',true);
             }else if(thisObj.type === 'halfRing'){
-              //this.$store.commit('setText','GK');
+              this.$store.commit('changeIsPlayerState',true);
+              this.$store.commit('changePlayerTextState',true);
+            }else {
+              this.$store.commit('changePlayerTextState',false);
             }
           }else if(thisObj instanceof Line){
             this.$store.commit('changeIsLineState',true);
@@ -292,16 +296,18 @@
           let color = '';
           if(tool === 'point' || tool === 'triangle'){
             color = this.color[this.equipmentColor];
+            this.$store.commit('changePlayerTextState',false);
           }else if(tool === 'ring' || tool === 'halfRing' || tool === 'halfTriangle' || tool === 'halfCircular'){
             color =  this.color[this.playersColor];
+            this.$store.commit('changePlayerTextState',true);
           }
           this.obj = new Icon(ctx,tool,this.end,color);
           if(this.tool === 'halfRing'){
+            this.$store.commit('changeIsPlayerState',true);
             this.$store.commit('setText','GK');
-            //this.obj.text = 'GK';
           }else {
-            //this.$store.commit('setText','Label');
-            this.obj.text = '';
+            this.$store.commit('changeIsPlayerState',false);
+            this.$store.commit('setText','');
           }
           ctx.clearRect(0, 0, this.width, this.height);
           this.obj.draw();
@@ -310,7 +316,6 @@
           this.stack.push(this.obj);
           this.selectObj = this.obj;
           this.$store.commit('changeSelectState',true);
-          this.$store.commit('changePlayerTextState',true);
           this.obj = {};
           this.$store.commit('setTool','');
         }else if(tool = 'text'){
