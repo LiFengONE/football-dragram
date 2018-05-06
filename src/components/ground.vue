@@ -448,4 +448,8 @@
   .noGrid{
     background-image: url("../assets/footballField.png");
   }
+  #canvas{
+    width: 1000px;
+    height: 563px;
+  }
 </style>

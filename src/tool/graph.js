@@ -55,7 +55,7 @@ export default class Graph{
     this.ctx.translate(this.pos.x,this.pos.y);
     this.ctx.rotate(this.angle);
     this.ctx.strokeStyle = `rgb(69, 214, 149)`;
-    this.ctx.strokeRect(- this.width / 2 , - this.height / 2 , this.width, this.height);
+    this.ctx.strokeRect(- this.width / 2 - 5 , - this.height / 2 - 5, this.width + 10 , this.height + 10);
     this.ctx.restore();
   }
 }
