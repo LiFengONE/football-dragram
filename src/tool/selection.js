@@ -8,7 +8,8 @@ export default class Selection{
     this.color = color;
     this.width = this.end.x - this.start.x;
     this.height =  this.end.y - this.start.y;
-    this.length = this.width > this.height ? this.height : this.width;
+    this.length = Math.abs(this.width) > Math.abs(this.height) ? this.height : this.width;
+    this.edge = Math.abs(this.width) > Math.abs(this.height) ? this.height * 2 / 3 * Math.sqrt(3) : this.width;
     //this.diffX = 0;
     //this.diffY = 0;
     this.diffStartX = 0;
@@ -21,20 +22,34 @@ export default class Selection{
     for(let i=1; i<7; i+=2){
       colorArr.push(parseInt("0x"+this.color.slice(i,i+2)));
     }
-    let point = {
-      x: - this.width / 2,
-      y: - this.height / 2
-    };
+    let point = {};
     let center = {};
     if(this.type === 'square'){
       center = {
         x: this.start.x + this.length / 2,
         y: this.start.y + this.length / 2
-      }
+      };
+      point = {
+        x: - this.length / 2,
+        y: - this.length / 2
+      };
+    }else if(this.type === 'reTriangle'){
+      center = {
+        x: this.start.x + this.edge / 2,
+        y: this.start.y + this.edge / 4 * Math.sqrt(3)
+      };
+      point = {
+        x: - this.edge / 2,
+        y: - this.edge / 4 * Math.sqrt(3)
+      };
     }else {
       center ={
         x: (this.end.x + this.start.x) / 2 ,
         y: (this.end.y + this.start.y) / 2
+      };
+      point = {
+        x: - this.width / 2,
+        y: - this.height / 2
       };
     }
     this.ctx.save();
@@ -62,6 +77,14 @@ export default class Selection{
         this.ctx.bezierCurveTo(a, -oy, ox, -b, 0, -b);
         this.ctx.bezierCurveTo(-ox, -b, -a, -oy, -a, 0);
         this.ctx.bezierCurveTo(-a, oy, -ox, b, 0, b);
+        this.ctx.closePath();
+        this.ctx.fill();
+        break;
+      case 'reTriangle':
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, - this.edge / 4 * Math.sqrt(3));
+        this.ctx.lineTo(- this.edge / 2, this.edge / 4 * Math.sqrt(3));
+        this.ctx.lineTo( this.edge / 2, this.edge / 4 * Math.sqrt(3));
         this.ctx.closePath();
         this.ctx.fill();
         break;
@@ -122,20 +145,34 @@ export default class Selection{
     this.angle += Math.PI / 4;
   }
   drawEdges(){
-    let point = {
-      x: - this.width / 2,
-      y: - this.height / 2
-    };
+    let point = {};
     let center = {};
     if(this.type === 'square'){
       center = {
         x: this.start.x + this.length / 2,
         y: this.start.y + this.length / 2
-      }
+      };
+      point = {
+        x: - this.length / 2,
+        y: - this.length / 2
+      };
+    }else if(this.type === 'reTriangle'){
+      center = {
+        x: this.start.x + this.edge / 2,
+        y: this.start.y + this.edge / 4 * Math.sqrt(3)
+      };
+      point = {
+        x: - this.edge / 2,
+        y: - this.edge / 4 * Math.sqrt(3)
+      };
     }else {
       center ={
         x: (this.end.x + this.start.x) / 2 ,
         y: (this.end.y + this.start.y) / 2
+      };
+      point = {
+        x: - this.width / 2,
+        y: - this.height / 2
       };
     }
     this.ctx.save();
@@ -148,6 +185,12 @@ export default class Selection{
      this.ctx.strokeRect(point.x + this.length - 4  ,point.y - 4,8,8);
      this.ctx.strokeRect(point.x - 4 ,point.y + this.length -4,8,8);
      this.ctx.strokeRect(point.x + this.length - 4 ,point.y + this.length -4,8,8);
+   }else if(this.type === 'reTriangle'){
+     this.ctx.strokeRect(point.x,point.y,this.edge,this.edge / 2 * Math.sqrt(3));
+     this.ctx.strokeRect(point.x - 4  ,point.y - 4,8,8);
+     this.ctx.strokeRect(point.x + this.edge - 4  ,point.y - 4,8,8);
+     this.ctx.strokeRect(point.x - 4 ,point.y + this.edge / 2 * Math.sqrt(3) -4,8,8);
+     this.ctx.strokeRect(point.x + this.edge - 4 ,point.y + this.edge / 2 * Math.sqrt(3) -4,8,8);
    }else {
      this.ctx.strokeRect(point.x,point.y,this.width,this.height);
      this.ctx.strokeRect(point.x - 4  ,point.y - 4,8,8);
@@ -155,34 +198,6 @@ export default class Selection{
      this.ctx.strokeRect(point.x - 4 ,point.y + this.height -4,8,8);
      this.ctx.strokeRect(point.x + this.width - 4 ,point.y + this.height -4,8,8);
    }
-    // switch (this.type){
-    //   case 'square':
-    //     let length = width > height ? height : width;
-    //     this.ctx.strokeRect(this.start.x,this.start.y,length,length);
-    //     this.ctx.strokeRect(this.start.x - 4  ,this.start.y - 4,8,8);
-    //     this.ctx.strokeRect(this.start.x + length - 4  ,this.start.y - 4,8,8);
-    //     this.ctx.strokeRect(this.start.x - 4 ,this.start.y + height -4,8,8);
-    //     this.ctx.strokeRect(this.start.x + length - 4 ,this.start.y + height -4,8,8);
-    //     break;
-    //   case 'rectangle':
-    //     this.ctx.strokeRect(this.start.x,this.start.y,width,height);
-    //     this.ctx.strokeRect(this.start.x - 4  ,this.start.y - 4,8,8);
-    //     this.ctx.strokeRect(this.start.x + width - 4  ,this.start.y - 4,8,8);
-    //     this.ctx.strokeRect(this.start.x + width / 2 - 4  ,this.start.y - 4,8,8);
-    //     this.ctx.strokeRect(this.start.x - 4 ,this.start.y + height -4,8,8);
-    //     this.ctx.strokeRect(this.start.x + width / 2 - 4  ,this.start.y + height - 4,8,8);
-    //     this.ctx.strokeRect(this.start.x + width - 4 ,this.start.y + height -4,8,8);
-    //     break;
-    //   case 'circular':
-    //     this.ctx.strokeRect(this.start.x,this.start.y,width,height);
-    //     this.ctx.strokeRect(this.start.x - 4  ,this.start.y - 4,8,8);
-    //     this.ctx.strokeRect(this.start.x + width - 4  ,this.start.y - 4,8,8);
-    //     this.ctx.strokeRect(this.start.x + width / 2 - 4  ,this.start.y - 4,8,8);
-    //     this.ctx.strokeRect(this.start.x - 4 ,this.start.y + height -4,8,8);
-    //     this.ctx.strokeRect(this.start.x + width / 2 - 4  ,this.start.y + height - 4,8,8);
-    //     this.ctx.strokeRect(this.start.x + width - 4 ,this.start.y + height -4,8,8);
-    //     break;
-    // }
     this.ctx.restore();
   }
 }

@@ -150,7 +150,7 @@
             thisObj.diffX = this.start.x - thisObj.pos.x;
             thisObj.diffY = this.start.y - thisObj.pos.y;
             this.$store.commit('changePlayerTextState',false);
-            this.$store.commit('changeIsLineState',false);
+            this.$store.commit('changeIsLineState',true);
           }else if(thisObj instanceof Icon){
             this.$store.commit('changeIsLineState',false);
             this.$store.commit('setText',thisObj.text);
@@ -164,6 +164,11 @@
               this.$store.commit('changePlayerTextState',false);
             }
           }else if(thisObj instanceof Line){
+            if(thisObj.type === 'ruler'){
+              this.$store.commit('changeIsPlayerState',false);
+              this.$store.commit('changePlayerTextState',true);
+              this.$store.commit('setText',thisObj.text);
+            }
             this.$store.commit('changeIsLineState',true);
           } else {
             this.$store.commit('changePlayerTextState',false);
@@ -180,13 +185,19 @@
           if(this.tool){
             this.end = this.canvasMousePos(canvas,event);
             ctx.clearRect(0, 0, this.width, this.height);
-            if(tool === 'square' || tool === 'rectangle' || tool === 'circular'){
+            if(tool === 'square' || tool === 'rectangle' || tool === 'circular' || tool === 'reTriangle'){
               let selectionColor = this.color[this.shapesColor];
               this.obj = new Selection(ctx,tool,this.start,this.end,selectionColor);
               this.obj.draw();
               this.obj.drawEdges();
               this.reDraw();
-            }else if(tool === 'solidArrowLine' || tool === 'dottedArrowLine' || tool === 'waveLine' || tool === 'dottedLine'){
+            }else if(tool === 'ruler'){
+              let selectionColor = this.color[this.shapesColor];
+              this.obj = new Line(ctx,tool,this.start,this.end,selectionColor);
+              this.obj.draw();
+              this.obj.drawEdges();
+              this.reDraw();
+            } else if(tool === 'solidArrowLine' || tool === 'dottedArrowLine' || tool === 'waveLine' || tool === 'dottedLine'){
               let lineColor = this.color[this.linesColor];
               this.obj = new Line(ctx,tool,this.start,this.end,lineColor);
               this.obj.draw();
@@ -388,7 +399,7 @@
         this.reDraw();
       },
       text(){
-        if(this.selectObj instanceof Icon){
+        if(this.selectObj instanceof Icon || (this.selectObj instanceof Line && this.selectObj.type === 'ruler')){
           this.selectObj.text = this.text;
           this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
           this.selectObj.drawEdges();

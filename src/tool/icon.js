@@ -49,7 +49,11 @@ export default class Icon{
         this.ctx.fill();
         this.ctx.fillStyle = 'black';
         this.ctx.font = "bold 28px"; //字体样式
-        this.ctx.fillText(this.text,  - 6 ,  5);
+        if(this.text.length === 1){
+          this.ctx.fillText(this.text,  - 4 ,  4);
+        }else {
+          this.ctx.fillText(this.text,  - 6 ,  4);
+        }
         break;
       case 'halfRing':
         //this.width = 12;
@@ -83,7 +87,11 @@ export default class Icon{
         this.ctx.fill();
         this.ctx.fillStyle = 'black';
         this.ctx.font = "bold 28px"; //字体样式
-        this.ctx.fillText(this.text,  - 6 ,  5);
+        if(this.text.length === 1){
+          this.ctx.fillText(this.text,  - 4 ,  4);
+        }else {
+          this.ctx.fillText(this.text,  - 6 ,  5);
+        }
         break;
       case 'halfTriangle':
         //this.width = 20;
@@ -104,7 +112,11 @@ export default class Icon{
         this.ctx.fill();
         this.ctx.fillStyle = 'black';
         this.ctx.font = "bold 28px"; //字体样式
-        this.ctx.fillText(this.text,  - 6 ,  5);
+        if(this.text.length === 1){
+          this.ctx.fillText(this.text,  - 4 ,  6);
+        }else {
+          this.ctx.fillText(this.text,  - 6 ,  5);
+        }
         break;
       case 'halfCircular':
         //this.width = 12;
@@ -122,7 +134,11 @@ export default class Icon{
         this.ctx.fill();
         this.ctx.fillStyle = 'black';
         this.ctx.font = "bold 28px"; //字体样式
-        this.ctx.fillText(this.text,  - 6 ,  5);
+        if(this.text.length === 1){
+          this.ctx.fillText(this.text,  - 3 ,  6);
+        }else {
+          this.ctx.fillText(this.text,  - 6 ,  5);
+        }
         break;
     }
     this.ctx.restore();

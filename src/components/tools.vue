@@ -124,6 +124,11 @@
             </svg>
           </span>
         </div>
+        <div class="tool-select-three hand">
+          <span id="polygon" :class="theTool === 'polygon' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">多边形</span>
+          <span id="reTriangle" :class="theTool === 'reTriangle' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">三角形</span>
+          <span id="ruler" :class="theTool === 'ruler' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">标尺</span>
+        </div>
       </div>
     </div>
     <div class="equipment tool">

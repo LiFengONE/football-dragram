@@ -5,6 +5,7 @@ export default class Line{
     this.start = start;
     this.end = end;
     this.color = color;
+    this.text = '';
     this.cache = {
       start: {
         x: start.x,
@@ -34,6 +35,10 @@ export default class Line{
     }
   }
   draw(){
+    let width = this.end.x - this.start.x;
+    let height = this.end.y - this.start.y;
+    let alpha = Math.atan2(width, height);
+    let len = Math.sqrt(width * width + height * height);
     this.ctx.strokeStyle = this.color;
     this.ctx.fillStyle = this.color;
     this.ctx.lineWidth = 2;
@@ -60,10 +65,6 @@ export default class Line{
         this.drawArrow(this.start.x, this.start.y, this.end.x, this.end.y);
         break;
       case 'waveLine':
-        let width = this.end.x - this.start.x;
-        let height = this.end.y - this.start.y;
-        let alpha = Math.atan2(width, height);
-        let len = Math.sqrt(width * width + height * height);
         this.ctx.save();
         this.ctx.moveTo(this.start.x,this.start.y);
         this.ctx.translate(this.start.x,this.start.y);
@@ -78,6 +79,7 @@ export default class Line{
           this.ctx.lineTo(x, y);
           x = x + 1;
         }
+        //this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.restore();
         this.drawArrow(this.start.x, this.start.y, this.end.x, this.end.y);
@@ -91,6 +93,27 @@ export default class Line{
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.restore();
+        break;
+      case 'ruler':
+        this.ctx.save();
+        this.ctx.translate(this.start.x,this.start.y);
+        this.ctx.rotate(  Math.PI / 2 - alpha);
+        this.ctx.beginPath();
+        this.ctx.moveTo(0,0);
+        this.ctx.lineTo(len / 2 - 20,0);
+        this.ctx.moveTo(len / 2 + 20,0);
+        this.ctx.lineTo(len,0);
+        this.ctx.stroke();
+        if(this.text.length === 1){
+          this.ctx.fillText(this.text,  len / 2 - 2 , 4);
+        }else if(this.text.length === 2){
+          this.ctx.fillText(this.text, len / 2 - 6 , 4);
+        }else if(this.text.length === 2){
+          this.ctx.fillText(this.text, len / 2 - 10 , 4);
+        }
+        this.ctx.restore();
+        this.drawArrow(this.start.x, this.start.y, this.end.x, this.end.y);
+        this.drawArrow(this.end.x, this.end.y, this.start.x, this.start.y);
         break;
     }
   }
