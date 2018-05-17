@@ -1,10 +1,11 @@
 export default class Line{
-  constructor(ctx,type,start,end,color){
+  constructor(ctx,type,start,end,color,edgeColor){
     this.ctx = ctx;
     this.type = type;
     this.start = start;
     this.end = end;
     this.color = color;
+    this.edgeColor = edgeColor;
     this.text = '';
     this.cache = {
       start: {
@@ -156,7 +157,7 @@ export default class Line{
     this.end.y = diffY + this.cache.end.y;
   }
   drawEdges(){
-    this.ctx.strokeStyle = `rgb(69, 214, 149)`;
+    this.ctx.strokeStyle = this.edgeColor;
     this.ctx.strokeRect(this.start.x - 8,this.start.y - 8,16,16);
     this.ctx.strokeRect(this.end.x - 8,this.end.y - 8,16,16);
   }

@@ -19,7 +19,8 @@
       </div>
       <div v-show="shapesIsOpen">
         <div class="color-select">
-          <span class="green shapes" @click="changeColor($event)">
+          <template v-if="type === 'coach'">
+            <span class="green shapes" @click="changeColor($event)">
             <template v-if="shapesColor === 'green' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -31,7 +32,7 @@
               </svg>
             </template>
           </span>
-          <span class="blue shapes" @click="changeColor($event)">
+            <span class="blue shapes" @click="changeColor($event)">
             <template v-if="shapesColor === 'blue' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -43,7 +44,7 @@
               </svg>
             </template>
           </span>
-          <span class="yellow shapes" @click="changeColor($event)">
+            <span class="yellow shapes" @click="changeColor($event)">
             <template v-if="shapesColor === 'yellow' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -55,7 +56,7 @@
               </svg>
             </template>
           </span>
-          <span class="red shapes" @click="changeColor($event)">
+            <span class="red shapes" @click="changeColor($event)">
             <template v-if="shapesColor === 'red' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -67,7 +68,7 @@
               </svg>
             </template>
           </span>
-          <span class="black shapes" @click="changeColor($event)">
+            <span class="black shapes" @click="changeColor($event)">
             <template v-if="shapesColor === 'black' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -79,7 +80,7 @@
               </svg>
             </template>
           </span>
-          <span class="grey shapes" @click="changeColor($event)">
+            <span class="grey shapes" @click="changeColor($event)">
             <template v-if="shapesColor === 'grey' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -91,6 +92,81 @@
               </svg>
             </template>
           </span>
+          </template>
+          <template v-else>
+            <span class="blue shapes" @click="changeColor($event)">
+            <template v-if="shapesColor === 'blue' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="yellow shapes" @click="changeColor($event)">
+            <template v-if="shapesColor === 'yellow' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="red shapes" @click="changeColor($event)">
+            <template v-if="shapesColor === 'red' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="black shapes" @click="changeColor($event)">
+            <template v-if="shapesColor === 'black' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="grey shapes" @click="changeColor($event)">
+            <template v-if="shapesColor === 'grey' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="white shapes" @click="changeColor($event)">
+            <template v-if="shapesColor === 'white' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+          </template>
         </div>
         <div class="tool-select-three hand">
           <span id="square" :class="theTool === 'square' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">
@@ -150,7 +226,8 @@
       </div>
       <div v-show="equipmentIsOpen">
         <div class="color-select">
-          <span class="green equipment" @click="changeColor($event)">
+          <template v-if="type === 'coach'">
+            <span class="green equipment" @click="changeColor($event)">
             <template v-if="equipmentColor === 'green' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -162,7 +239,7 @@
               </svg>
             </template>
           </span>
-          <span class="blue equipment" @click="changeColor($event)">
+            <span class="blue equipment" @click="changeColor($event)">
             <template v-if="equipmentColor === 'blue' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -174,7 +251,7 @@
               </svg>
             </template>
           </span>
-          <span class="yellow equipment" @click="changeColor($event)">
+            <span class="yellow equipment" @click="changeColor($event)">
             <template v-if="equipmentColor === 'yellow' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -186,7 +263,7 @@
               </svg>
             </template>
           </span>
-          <span class="red equipment" @click="changeColor($event)">
+            <span class="red equipment" @click="changeColor($event)">
             <template v-if="equipmentColor === 'red' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -198,7 +275,7 @@
               </svg>
             </template>
           </span>
-          <span class="black equipment" @click="changeColor($event)">
+            <span class="black equipment" @click="changeColor($event)">
             <template v-if="equipmentColor === 'black' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -210,7 +287,7 @@
               </svg>
             </template>
           </span>
-          <span class="grey equipment" @click="changeColor($event)">
+            <span class="grey equipment" @click="changeColor($event)">
             <template v-if="equipmentColor === 'grey' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -222,6 +299,81 @@
               </svg>
             </template>
           </span>
+          </template>
+          <template v-else>
+            <span class="blue equipment" @click="changeColor($event)">
+            <template v-if="equipmentColor === 'blue' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="yellow equipment" @click="changeColor($event)">
+            <template v-if="equipmentColor === 'yellow' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="red equipment" @click="changeColor($event)">
+            <template v-if="equipmentColor === 'red' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="black equipment" @click="changeColor($event)">
+            <template v-if="equipmentColor === 'black' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="grey equipment" @click="changeColor($event)">
+            <template v-if="equipmentColor === 'grey' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="white equipment" @click="changeColor($event)">
+            <template v-if="equipmentColor === 'white' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+          </template>
         </div>
         <div class="tool-select-three move">
           <span id="ball" @mouseover="getBorder($event)" @mouseout="removeBorder($event)" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
@@ -418,7 +570,8 @@
       </div>
       <div v-show="playersIsOpen">
         <div class="color-select">
-          <span class="green players" @click="changeColor($event)">
+          <template v-if="type === 'coach'">
+            <span class="green players" @click="changeColor($event)">
             <template v-if="playersColor === 'green' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -430,7 +583,7 @@
               </svg>
             </template>
           </span>
-          <span class="blue players" @click="changeColor($event)">
+            <span class="blue players" @click="changeColor($event)">
             <template v-if="playersColor === 'blue' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -442,7 +595,7 @@
               </svg>
             </template>
           </span>
-          <span class="yellow players" @click="changeColor($event)">
+            <span class="yellow players" @click="changeColor($event)">
             <template v-if="playersColor === 'yellow' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -454,7 +607,7 @@
               </svg>
             </template>
           </span>
-          <span class="red players" @click="changeColor($event)">
+            <span class="red players" @click="changeColor($event)">
             <template v-if="playersColor === 'red' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -466,7 +619,7 @@
               </svg>
             </template>
           </span>
-          <span class="black players" @click="changeColor($event)">
+            <span class="black players" @click="changeColor($event)">
             <template v-if="playersColor === 'black' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -478,7 +631,7 @@
               </svg>
             </template>
           </span>
-          <span class="grey players" @click="changeColor($event)">
+            <span class="grey players" @click="changeColor($event)">
             <template v-if="playersColor === 'grey' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -490,6 +643,81 @@
               </svg>
             </template>
           </span>
+          </template>
+          <template v-else>
+            <span class="blue players" @click="changeColor($event)">
+            <template v-if="playersColor === 'blue' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="yellow players" @click="changeColor($event)">
+            <template v-if="playersColor === 'yellow' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="red players" @click="changeColor($event)">
+            <template v-if="playersColor === 'red' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="black players" @click="changeColor($event)">
+            <template v-if="playersColor === 'black' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="grey players" @click="changeColor($event)">
+            <template v-if="playersColor === 'grey' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="white players" @click="changeColor($event)">
+            <template v-if="playersColor === 'white' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+          </template>
         </div>
         <div class="tool-select-two move">
           <span id="ring" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
@@ -552,7 +780,8 @@
       </div>
       <div v-show="linesIsOpen">
         <div class="color-select">
-          <span class="green lines" @click="changeColor($event)">
+          <template v-if="type === 'coach'">
+            <span class="green lines" @click="changeColor($event)">
             <template v-if="linesColor === 'green' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -564,7 +793,7 @@
               </svg>
             </template>
           </span>
-          <span class="blue lines" @click="changeColor($event)">
+            <span class="blue lines" @click="changeColor($event)">
             <template v-if="linesColor === 'blue' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -576,7 +805,7 @@
               </svg>
             </template>
           </span>
-          <span class="yellow lines" @click="changeColor($event)">
+            <span class="yellow lines" @click="changeColor($event)">
             <template v-if="linesColor === 'yellow' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -588,7 +817,7 @@
               </svg>
             </template>
           </span>
-          <span class="red lines" @click="changeColor($event)">
+            <span class="red lines" @click="changeColor($event)">
             <template v-if="linesColor === 'red' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -600,7 +829,7 @@
               </svg>
             </template>
           </span>
-          <span class="black lines" @click="changeColor($event)">
+            <span class="black lines" @click="changeColor($event)">
             <template v-if="linesColor === 'black' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -612,7 +841,7 @@
               </svg>
             </template>
           </span>
-          <span class="grey lines" @click="changeColor($event)">
+            <span class="grey lines" @click="changeColor($event)">
             <template v-if="linesColor === 'grey' ">
               <svg class="icon icon-M fill-white undefined">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
@@ -624,6 +853,81 @@
               </svg>
             </template>
           </span>
+          </template>
+          <template v-else>
+            <span class="blue lines" @click="changeColor($event)">
+            <template v-if="linesColor === 'blue' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="yellow lines" @click="changeColor($event)">
+            <template v-if="linesColor === 'yellow' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="red lines" @click="changeColor($event)">
+            <template v-if="linesColor === 'red' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="black lines" @click="changeColor($event)">
+            <template v-if="linesColor === 'black' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="grey lines" @click="changeColor($event)">
+            <template v-if="linesColor === 'grey' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+            <span class="white lines" @click="changeColor($event)">
+            <template v-if="linesColor === 'white' ">
+              <svg class="icon icon-M fill-white undefined">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-tick">
+                  <svg id="icon-tick" viewBox="0 0 32 32" width="100%" height="100%">
+                    <title>tick</title>
+                    <path fill="white" d="M12 21.6l-5.6-5.6-1.867 1.867 7.467 7.467 16-16-1.867-1.867-14.133 14.133z"></path>
+                  </svg>
+                </use>
+              </svg>
+            </template>
+          </span>
+          </template>
         </div>
         <div class="tool-select-two hand">
           <span  id="solidArrowLine" :class="theTool === 'solidArrowLine' ? 'bgGreen' : 'bgWhite'" @click="changeTool($event)">
@@ -719,6 +1023,7 @@
         graph:''
       }
     },
+    props:['type'],
     computed: {
       shapesColor(){
         return this.$store.state.shapesColor;
@@ -811,6 +1116,13 @@
       },
       dragEnd(event){
         this.graph = ''
+      }
+    },
+    mounted(){
+      if(this.type === 'coach'){
+        this.$store.commit('setPlayersColor','green');
+      }else {
+        this.$store.commit('setPlayersColor','red');
       }
     }
   }

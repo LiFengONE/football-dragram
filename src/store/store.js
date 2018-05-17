@@ -12,7 +12,7 @@ const store = new Vuex.Store({
     isSelected:false,
     shapesColor: 'yellow',
     equipmentColor: 'yellow',
-    playersColor: 'green',
+    playersColor: '',
     linesColor: 'black',
     color: {
       green: '#45d695',
@@ -20,7 +20,8 @@ const store = new Vuex.Store({
       yellow: '#ecc434',
       red: '#e54f3a',
       black: '#2f313c',
-      grey: '#d5d5d5'
+      grey: '#d5d5d5',
+      white: '#ffffff'
     },
     tool: '',
     downloading:false,

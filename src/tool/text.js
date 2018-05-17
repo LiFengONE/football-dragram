@@ -1,8 +1,9 @@
 export default class Text{
-  constructor(ctx,text,pos){
+  constructor(ctx,text,pos,edgeColor){
     this.ctx = ctx;
     this.text = text;
     this.pos = pos;
+    this.edgeColor = edgeColor;
     this.angle = 0;
     this.width = 200;
     this.height = 20;
@@ -55,7 +56,7 @@ export default class Text{
     this.ctx.save();
     this.ctx.translate(this.pos.x,this.pos.y);
     this.ctx.rotate(this.angle);
-    this.ctx.strokeStyle = `rgb(69, 214, 149)`;
+    this.ctx.strokeStyle = this.edgeColor;
     this.ctx.strokeRect(- this.width / 2 - 10, - this.height / 2 , this.width, this.height);
     this.ctx.strokeRect(- this.width / 2 -14 ,-4,8,8);
     this.ctx.strokeRect( this.width / 2 -14 ,-4,8,8);

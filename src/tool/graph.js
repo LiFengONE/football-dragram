@@ -1,9 +1,10 @@
 export default class Graph{
-  constructor(ctx,type,img,pos){
+  constructor(ctx,type,img,pos,edgeColor){
     this.ctx = ctx;
     this.type = type;
     this.img = img;
     this.pos = pos;
+    this.edgeColor = edgeColor;
     this.angle = 0;
     this.width = 0;
     this.height = 0;
@@ -54,7 +55,7 @@ export default class Graph{
     this.ctx.save();
     this.ctx.translate(this.pos.x,this.pos.y);
     this.ctx.rotate(this.angle);
-    this.ctx.strokeStyle = `rgb(69, 214, 149)`;
+    this.ctx.strokeStyle = this.edgeColor;
     this.ctx.strokeRect(- this.width / 2 - 5 , - this.height / 2 - 5, this.width + 10 , this.height + 10);
     this.ctx.restore();
   }

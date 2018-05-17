@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="back">
-      <span>
+      <span @click="goBack">
         <svg class="icon icon-M fill-dark undefined">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-arrow-long-left">
             <svg id="icon-arrow-long-left" viewBox="0 0 32 32" width="100%" height="100%">
@@ -145,6 +145,9 @@
       },
       rotateObj(){
         this.$store.commit('changeToRotate');
+      },
+      goBack(){
+        this.$router.goBack();
       }
     }
   }

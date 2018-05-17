@@ -1,11 +1,12 @@
 export default class Selection{
-  constructor(ctx,type,start,end,color){
+  constructor(ctx,type,start,end,color,edgeColor){
     this.ctx = ctx;
     this.type = type;
     this.start = start;
     this.end = end;
     this.angle = 0;
     this.color = color;
+    this.edgeColor = edgeColor;
     this.width = this.end.x - this.start.x;
     this.height =  this.end.y - this.start.y;
     this.length = Math.abs(this.width) > Math.abs(this.height) ? this.height : this.width;
@@ -100,6 +101,12 @@ export default class Selection{
         [this.start.x + this.length, this.start.y + this.length],
         [this.start.x, this.start.y + this.length]
       ];
+    }else if(this.type === 'reTriangle'){
+      points = [
+        [this.start.x + this.edge / 2, this.start.y],
+        [this.start.x ,this.end.y],
+        [this.start.x + this.edge, this.start.y + this.edge / 2 * Math.sqrt(3)]
+      ];
     }else {
       points = [
         [this.start.x , this.start.y],
@@ -113,7 +120,12 @@ export default class Selection{
       center = {
         x: this.start.x + this.length / 2,
         y: this.start.y + this.length / 2
-      }
+      };
+    }else if(this.type === 'reTriangle'){
+      center = {
+        x: this.start.x + this.edge / 2,
+        y: this.start.y + this.edge / 4 * Math.sqrt(3)
+      };
     }else {
       center ={
         x: (this.end.x + this.start.x) / 2 ,
@@ -178,7 +190,7 @@ export default class Selection{
     this.ctx.save();
     this.ctx.translate(center.x,center.y);
     this.ctx.rotate(this.angle);
-    this.ctx.strokeStyle = `rgb(69, 214, 149)`;
+    this.ctx.strokeStyle = this.edgeColor;
    if(this.type === 'square'){
      this.ctx.strokeRect(point.x,point.y,this.length,this.length);
      this.ctx.strokeRect(point.x - 4  ,point.y - 4,8,8);
@@ -186,9 +198,13 @@ export default class Selection{
      this.ctx.strokeRect(point.x - 4 ,point.y + this.length -4,8,8);
      this.ctx.strokeRect(point.x + this.length - 4 ,point.y + this.length -4,8,8);
    }else if(this.type === 'reTriangle'){
-     this.ctx.strokeRect(point.x,point.y,this.edge,this.edge / 2 * Math.sqrt(3));
-     this.ctx.strokeRect(point.x - 4  ,point.y - 4,8,8);
-     this.ctx.strokeRect(point.x + this.edge - 4  ,point.y - 4,8,8);
+     this.ctx.beginPath();
+     this.ctx.moveTo(0, - this.edge / 4 * Math.sqrt(3));
+     this.ctx.lineTo(- this.edge / 2, this.edge / 4 * Math.sqrt(3));
+     this.ctx.lineTo( this.edge / 2, this.edge / 4 * Math.sqrt(3));
+     this.ctx.closePath();
+     this.ctx.stroke();
+     this.ctx.strokeRect(point.x - 4 + this.edge / 2 ,point.y -4,8,8);
      this.ctx.strokeRect(point.x - 4 ,point.y + this.edge / 2 * Math.sqrt(3) -4,8,8);
      this.ctx.strokeRect(point.x + this.edge - 4 ,point.y + this.edge / 2 * Math.sqrt(3) -4,8,8);
    }else {

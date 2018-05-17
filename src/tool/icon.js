@@ -1,9 +1,10 @@
 export default class Icon{
-  constructor(ctx,type,pos,color){
+  constructor(ctx,type,pos,color,edgeColor){
     this.ctx = ctx;
     this.type = type;
     this.pos = pos;
     this.color = color;
+    this.edgeColor = edgeColor;
     this.width = 20;
     this.height = 20;
     this.angle = 0;
@@ -110,7 +111,7 @@ export default class Icon{
         this.ctx.closePath();
         this.ctx.fillStyle = 'black';
         this.ctx.fill();
-        this.ctx.fillStyle = 'black';
+        this.ctx.fillStyle = 'white';
         this.ctx.font = "bold 28px"; //字体样式
         if(this.text.length === 1){
           this.ctx.fillText(this.text,  - 4 ,  6);
@@ -132,7 +133,7 @@ export default class Icon{
         this.ctx.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
-        this.ctx.fillStyle = 'black';
+        this.ctx.fillStyle = 'white';
         this.ctx.font = "bold 28px"; //字体样式
         if(this.text.length === 1){
           this.ctx.fillText(this.text,  - 3 ,  6);
@@ -180,7 +181,7 @@ export default class Icon{
     this.ctx.save();
     this.ctx.translate(this.pos.x,this.pos.y);
     this.ctx.rotate(this.angle);
-    this.ctx.strokeStyle = `rgb(69, 214, 149)`;
+    this.ctx.strokeStyle = this.edgeColor;
     this.ctx.strokeRect(- this.width / 2 , - this.height / 2 , this.width, this.height);
     this.ctx.restore();
   }

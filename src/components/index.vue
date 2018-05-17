@@ -1,24 +1,24 @@
 <template>
   <div class="index">
-    <img src="../assets/header.png">
-    <operation></operation>
-    <div class="main">
-      <tools class="menu"></tools>
-      <ground class="ground" ref="ground"></ground>
+    <img class="header" src="../assets/header.png">
+    <div class="pick">
+      <span>Pick your theme</span>
+    </div>
+    <div class="choice">
+      <router-link to="/coach">
+        <img class="coaching" src="../assets/coach.png">
+      </router-link>
+      <router-link to="/standard">
+        <img class="federation" src="../assets/standard.png">
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
-  import operation from "./operation.vue";
-  import tools from "./tools.vue";
-  import ground from "./ground.vue";
   export default {
     name: 'index',
     components:{
-      operation,
-      tools,
-      ground
     },
     data () {
       return {
@@ -28,18 +28,45 @@
 </script>
 
 <style lang="scss" scoped>
-  img{
+  html,body{
     width: 100%;
+    height: 100%;
+  }
+  .index{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(67,69,79);
+    .header{
+      width: 100%;
+    }
+    .pick{
+      width: 100%;
+      height: 40px;
+      text-align: center;
+      color: white;
+      font-size: 30px;
+      margin: 80px auto 30px auto;
+    }
+    .choice{
+      text-align: center;
+      width: 100%;
+      position: absolute;
+      top: 213px;
+      bottom: 0;
+      left: 0;
+      background-color: rgb(67,69,79);
+      img{
+        width: 520px;
+        height: 410px;
+        transition: all 0.2s;
+        &:hover{
+          transform: scale(1.03);
+        }
+      }
+      .coaching{
+        margin-right: 20px;
+      }
+    }
+  }
 
-  }
-  .main{
-    display: flex;
-    width: 100%;
-  }
-  .menu{
-    flex: 2;
-  }
-  .ground{
-    flex: 11;
-  }
 </style>

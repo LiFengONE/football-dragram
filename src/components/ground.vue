@@ -1,14 +1,15 @@
 <template>
-  <div id="ground">
-    <div :class="['field', hasGrid ? 'hasGrid' : 'noGrid']" ref="field">
+  <div id="ground" ref="ground" :class="type === 'coach' ? 'coachBg' : 'standardBg'">
+    <div :class="['field', type === 'coach' ? hasGrid ? 'hasGrid1' : 'noGrid1' : hasGrid ? 'hasGrid2' : 'noGrid2', type === 'coach' ? 'coachFieldBorder' : 'standardFieldBorder']" ref="field">
       <canvas id="canvas" ref="canvas" width="1000px" height="563px" @mousedown="canvasDown($event)"  @mousemove="canvasMove($event)" @mouseup="canvasUp($event)" @dragover="dragOver($event)" @drop="dragFinished($event)"></canvas>
-      <input type="text" id="inputText" ref="inputText">
+      <input type="text" id="inputText" :class="type === 'coach' ? 'coachInputBorder' : 'standardInputBorder'" ref="inputText">
     </div>
   </div>
 </template>
 
 <script>
   import Selection from '../tool/selection'
+  import Polygon from '../tool/polygon'
   import Line from '../tool/line'
   import Graph from '../tool/graph'
   import Icon from '../tool/icon'
@@ -32,9 +33,12 @@
         obj:{},
         selectObj:{},
         imgArr:[],
-        bgImg:{}
+        bgImg:{},
+        polygonObj:{},
+        edgeColor:''
       }
     },
+    props:['type'],
     computed:{
       tool(){
         return this.$store.state.tool;
@@ -96,6 +100,15 @@
         let ctx = canvas.getContext("2d");
         let stack = this.stack;
         ctx.clearRect(0, 0, this.width, this.height);
+        if(this.tool === 'polygon'){
+          if(JSON.stringify(this.polygonObj) === "{}"){
+            let selectionColor = this.color[this.shapesColor];
+            this.polygonObj = new Polygon(ctx,[[this.start.x,this.start.y]],[],selectionColor,this.edgeColor);
+            console.log(this.polygonObj)
+          }
+        }else {
+          this.polygonObj = {};
+        }
         let arr = [];
         for(let obj of stack){
           obj.draw();
@@ -170,7 +183,15 @@
               this.$store.commit('setText',thisObj.text);
             }
             this.$store.commit('changeIsLineState',true);
-          } else {
+          }else if(thisObj instanceof Polygon){
+            for(let point of thisObj.points){
+              let theDiff = [];
+              theDiff[0] = this.start.x - point[0];
+              theDiff[1] = this.start.y - point[1];
+              thisObj.diff.push(theDiff);
+            }
+            this.$store.commit('changeIsLineState',true);
+          }else {
             this.$store.commit('changePlayerTextState',false);
             this.$store.commit('changeIsLineState',false);
           }
@@ -187,21 +208,25 @@
             ctx.clearRect(0, 0, this.width, this.height);
             if(tool === 'square' || tool === 'rectangle' || tool === 'circular' || tool === 'reTriangle'){
               let selectionColor = this.color[this.shapesColor];
-              this.obj = new Selection(ctx,tool,this.start,this.end,selectionColor);
+              this.obj = new Selection(ctx,tool,this.start,this.end,selectionColor,this.edgeColor);
               this.obj.draw();
               this.obj.drawEdges();
               this.reDraw();
             }else if(tool === 'ruler'){
               let selectionColor = this.color[this.shapesColor];
-              this.obj = new Line(ctx,tool,this.start,this.end,selectionColor);
+              this.obj = new Line(ctx,tool,this.start,this.end,selectionColor,this.edgeColor);
               this.obj.draw();
               this.obj.drawEdges();
               this.reDraw();
             } else if(tool === 'solidArrowLine' || tool === 'dottedArrowLine' || tool === 'waveLine' || tool === 'dottedLine'){
               let lineColor = this.color[this.linesColor];
-              this.obj = new Line(ctx,tool,this.start,this.end,lineColor);
+              this.obj = new Line(ctx,tool,this.start,this.end,lineColor,this.edgeColor);
               this.obj.draw();
               this.obj.drawEdges();
+              this.reDraw();
+            }else if(tool === 'polygon'){
+              this.polygonObj.next = [this.end.x,this.end.y];
+              this.polygonObj.draw();
               this.reDraw();
             }
           }else if(JSON.stringify(this.selectObj) !== "{}"){
@@ -230,7 +255,28 @@
             x : 0,
             y : 0
           }
-        }else if(this.end.x !== this.start.x || this.end.y !== this.start.y){
+        }else if(JSON.stringify(this.polygonObj) !== "{}"){
+          let len = Math.sqrt(Math.pow(this.polygonObj.next[0] - this.polygonObj.points[0][0] , 2)  + Math.pow(this.polygonObj.next[1] - this.polygonObj.points[0][1] , 2));
+          if(len < 10){
+            this.polygonObj.finish = true;
+            this.stack.push(this.polygonObj);
+            this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
+            this.reDraw();
+            this.polygonObj.drawEdges();
+
+            this.polygonObj = {};
+          }else {
+            this.polygonObj.points.push(this.polygonObj.next);
+          }
+          this.start = {
+            x : 0,
+            y : 0
+          };
+          this.end = {
+            x : 0,
+            y : 0
+          }
+        } else if(this.end.x !== this.start.x || this.end.y !== this.start.y){
           if(this.selectObj instanceof Line){
             this.selectObj.cache.start.x = this.selectObj.start.x;
             this.selectObj.cache.start.y = this.selectObj.start.y;
@@ -292,7 +338,7 @@
               img = this.imgArr[6];
               break;
           }
-          this.obj = new Graph(ctx,tool,img,this.end);
+          this.obj = new Graph(ctx,tool,img,this.end,this.edgeColor);
           ctx.clearRect(0, 0, this.width, this.height);
           this.obj.draw();
           this.obj.drawEdges();
@@ -312,7 +358,7 @@
             color =  this.color[this.playersColor];
             this.$store.commit('changePlayerTextState',true);
           }
-          this.obj = new Icon(ctx,tool,this.end,color);
+          this.obj = new Icon(ctx,tool,this.end,color,this.edgeColor);
           if(this.tool === 'halfRing'){
             this.$store.commit('changeIsPlayerState',true);
             this.$store.commit('setText','GK');
@@ -341,7 +387,7 @@
               this.inputText.style.display = 'none';
               this.inputText.value = '';
               this.inputText.parentNode.style.position = '';
-              this.obj = new Text(ctx,text,this.end);
+              this.obj = new Text(ctx,text,this.end,this.edgeColor);
               ctx.clearRect(0, 0, this.width, this.height);
               this.obj.draw();
               this.obj.drawEdges();
@@ -421,16 +467,22 @@
         this.imgArr[i] = new Image();
         this.imgArr[i].src = srcArr[i];
       }
+      this.edgeColor = this.type === 'coach' ? 'rgb(69, 214, 149)' : 'white';
     }
   }
 </script>
 
 <style lang="scss" scoped>
   #ground{
-    background-image: url("../assets/background.png");
     background-repeat: repeat;
     display: flex;
     justify-content: center;
+  }
+  .coachBg{
+    background-image: url("../assets/coachBg.png");
+  }
+  .standardBg{
+    background-image: url("../assets/standardBg.png");
   }
   #inputText {
     display: none;
@@ -442,7 +494,12 @@
     filter: alpha(opacity=50);
     padding-left: 10px;
     line-height: 20px;
+  }
+  .coachInputBorder{
     border: solid 2px rgb(69, 214, 149);
+  }
+  .standardInputBorder{
+    border: solid 2px white;
   }
   .field{
     margin-top: 50px;
@@ -453,11 +510,23 @@
     background-position: 125px 31px;
     border: dashed 2px rgb(69, 214, 149) ;
   }
-  .hasGrid{
+  .coachFieldBorder{
+    border: dashed 2px rgb(69, 214, 149) ;
+  }
+  .standardFieldBorder{
+    border: dashed 2px white ;
+  }
+  .hasGrid1{
     background-image: url("../assets/footballField2.png");
   }
-  .noGrid{
+  .noGrid1{
     background-image: url("../assets/footballField.png");
+  }
+  .hasGrid2{
+    background-image: url("../assets/footballField4.png");
+  }
+  .noGrid2{
+    background-image: url("../assets/footballField3.png");
   }
   #canvas{
     width: 1000px;
