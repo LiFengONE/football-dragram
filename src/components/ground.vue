@@ -190,6 +190,7 @@
               theDiff[1] = this.start.y - point[1];
               thisObj.diff.push(theDiff);
             }
+            this.$store.commit('changePlayerTextState',false);
             this.$store.commit('changeIsLineState',true);
           }else {
             this.$store.commit('changePlayerTextState',false);
