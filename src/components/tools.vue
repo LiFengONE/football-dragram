@@ -201,9 +201,25 @@
           </span>
         </div>
         <div class="tool-select-three hand">
-          <span id="polygon" :class="theTool === 'polygon' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">多边形</span>
-          <span id="reTriangle" :class="theTool === 'reTriangle' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">三角形</span>
-          <span id="ruler" :class="theTool === 'ruler' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">标尺</span>
+          <span id="polygon" :class="theTool === 'polygon' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="32" height="32" viewBox="0 0 1697 1024">
+              <g id="icomoon-ignore"> </g>
+              <path :stroke="theTool === 'polygon' ? 'white' : color[shapesColor]" :fill="theTool === 'polygon' ? '#45d695' : 'white'" stroke-width="100" stroke-miterlimit="10" stroke-linecap="butt" stroke-linejoin="miter" d="M519.589 18.286h667.429l484.571 493.714-493.714 493.714h-658.286l-493.714-493.714 493.714-493.714z"></path>
+            </svg>
+          </span>
+          <span id="reTriangle" :class="theTool === 'reTriangle' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="20" height="20" viewBox="0 0 1024 1024">
+              <g id="icomoon-ignore"></g>
+              <path :stroke="theTool === 'reTriangle' ? 'white' : color[shapesColor]" :fill="theTool === 'reTriangle' ? '#45d695' : 'white'" stroke-width="100" stroke-miterlimit="10" stroke-linecap="butt" stroke-linejoin="miter" d="M506.253 67.211l495.785 889.578-980.076-17.187 484.278-872.391z"></path>
+            </svg>
+          </span>
+          <span id="ruler" :class="theTool === 'ruler' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="60" height="60" viewBox="0 0 5178 1024">
+              <g id="icomoon-ignore"></g>
+              <path :fill="theTool === 'ruler' ? 'white' : color[shapesColor]" d="M3277.28 339.925v344.15h1286.038v307.925l452.831-470.944-470.944-489.056 18.113 362.263z"></path>
+              <path :fill="theTool === 'ruler' ? 'white' : color[shapesColor]" d="M1918.793 665.962v-289.812h-1286.038v-344.15l-470.944 489.056 489.056 470.944v-326.038z"></path>
+            </svg>
+          </span>
         </div>
       </div>
     </div>
