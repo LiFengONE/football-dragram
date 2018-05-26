@@ -37,11 +37,11 @@ export default class Selection{
     }else if(this.type === 'reTriangle'){
       center = {
         x: this.start.x + this.edge / 2,
-        y: this.start.y + this.edge / 4 * Math.sqrt(3)
+        y: this.start.y + this.edge / 3 * Math.sqrt(3)
       };
       point = {
         x: - this.edge / 2,
-        y: - this.edge / 4 * Math.sqrt(3)
+        y: - this.edge / 3 * Math.sqrt(3)
       };
     }else {
       center ={
@@ -83,9 +83,9 @@ export default class Selection{
         break;
       case 'reTriangle':
         this.ctx.beginPath();
-        this.ctx.moveTo(0, - this.edge / 4 * Math.sqrt(3));
-        this.ctx.lineTo(- this.edge / 2, this.edge / 4 * Math.sqrt(3));
-        this.ctx.lineTo( this.edge / 2, this.edge / 4 * Math.sqrt(3));
+        this.ctx.moveTo(0, - this.edge / 3 * Math.sqrt(3));
+        this.ctx.lineTo(- this.edge / 2, this.edge / 6 * Math.sqrt(3));
+        this.ctx.lineTo( this.edge / 2, this.edge / 6 * Math.sqrt(3));
         this.ctx.closePath();
         this.ctx.fill();
         break;
@@ -124,7 +124,7 @@ export default class Selection{
     }else if(this.type === 'reTriangle'){
       center = {
         x: this.start.x + this.edge / 2,
-        y: this.start.y + this.edge / 4 * Math.sqrt(3)
+        y: this.start.y + this.edge / 3 * Math.sqrt(3)
       };
     }else {
       center ={
@@ -171,11 +171,11 @@ export default class Selection{
     }else if(this.type === 'reTriangle'){
       center = {
         x: this.start.x + this.edge / 2,
-        y: this.start.y + this.edge / 4 * Math.sqrt(3)
+        y: this.start.y + this.edge / 3 * Math.sqrt(3)
       };
       point = {
         x: - this.edge / 2,
-        y: - this.edge / 4 * Math.sqrt(3)
+        y: - this.edge / 3 * Math.sqrt(3)
       };
     }else {
       center ={
@@ -199,9 +199,9 @@ export default class Selection{
      this.ctx.strokeRect(point.x + this.length - 4 ,point.y + this.length -4,8,8);
    }else if(this.type === 'reTriangle'){
      this.ctx.beginPath();
-     this.ctx.moveTo(0, - this.edge / 4 * Math.sqrt(3));
-     this.ctx.lineTo(- this.edge / 2, this.edge / 4 * Math.sqrt(3));
-     this.ctx.lineTo( this.edge / 2, this.edge / 4 * Math.sqrt(3));
+     this.ctx.moveTo(0, - this.edge / 3 * Math.sqrt(3));
+     this.ctx.lineTo(- this.edge / 2, this.edge / 6 * Math.sqrt(3));
+     this.ctx.lineTo( this.edge / 2, this.edge / 6 * Math.sqrt(3));
      this.ctx.closePath();
      this.ctx.stroke();
      this.ctx.strokeRect(point.x - 4 + this.edge / 2 ,point.y -4,8,8);

@@ -43,39 +43,37 @@ export default class Line{
     this.ctx.strokeStyle = this.color;
     this.ctx.fillStyle = this.color;
     this.ctx.lineWidth = 2;
+    this.ctx.save();
+    this.ctx.moveTo(this.start.x,this.start.y);
+    this.ctx.translate(this.start.x,this.start.y);
+    this.ctx.rotate(  Math.PI / 2 - alpha);
     switch (this.type){
       case 'solidArrowLine':
-        this.ctx.save();
         this.ctx.beginPath();
-        this.ctx.moveTo(this.start.x, this.start.y);
-        this.ctx.lineTo(this.end.x, this.end.y);
+        this.ctx.moveTo(0 , 0);
+        this.ctx.lineTo(len, 0);
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.restore();
         this.drawArrow(this.start.x, this.start.y, this.end.x, this.end.y);
         break;
       case 'dottedArrowLine':
-        this.ctx.save();
         this.ctx.beginPath();
-        this.ctx.setLineDash([5,6]);
-        this.ctx.moveTo(this.start.x, this.start.y);
-        this.ctx.lineTo(this.end.x, this.end.y);
+        this.ctx.setLineDash([5,8]);
+        this.ctx.moveTo(0 , 0);
+        this.ctx.lineTo(len, 0);
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.restore();
         this.drawArrow(this.start.x, this.start.y, this.end.x, this.end.y);
         break;
       case 'waveLine':
-        this.ctx.save();
-        this.ctx.moveTo(this.start.x,this.start.y);
-        this.ctx.translate(this.start.x,this.start.y);
-        this.ctx.rotate(  Math.PI / 2 - alpha);
         this.ctx.beginPath();
         let x = 0;
         let y = 0;
         let amplitude = 5;
         let frequency = 5;
-        while (x < len - 20) {
+        while (x < len - 15) {
           y = amplitude * Math.sin(x / frequency);
           this.ctx.lineTo(x, y);
           x = x + 1;
@@ -86,23 +84,19 @@ export default class Line{
         this.drawArrow(this.start.x, this.start.y, this.end.x, this.end.y);
         break;
       case 'dottedLine':
-        this.ctx.save();
         this.ctx.beginPath();
-        this.ctx.setLineDash([5,6]);
-        this.ctx.moveTo(this.start.x, this.start.y);
-        this.ctx.lineTo(this.end.x, this.end.y);
+        this.ctx.setLineDash([5,8]);
+        this.ctx.moveTo(0 , 0);
+        this.ctx.lineTo(len, 0);
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.restore();
         break;
       case 'ruler':
-        this.ctx.save();
-        this.ctx.translate(this.start.x,this.start.y);
-        this.ctx.rotate(  Math.PI / 2 - alpha);
         this.ctx.beginPath();
         this.ctx.moveTo(0,0);
-        this.ctx.lineTo(len / 2 - 20,0);
-        this.ctx.moveTo(len / 2 + 20,0);
+        this.ctx.lineTo(len / 2 - 15,0);
+        this.ctx.moveTo(len / 2 + 15,0);
         this.ctx.lineTo(len,0);
         this.ctx.stroke();
         if(this.text.length === 1){
@@ -120,14 +114,14 @@ export default class Line{
   }
   drawArrow(x1, y1, x2, y2) {
     let endRadians = Math.atan((y2 - y1) / (x2 - x1));
-    endRadians += ((x2 > x1) ? 90 : -90) * Math.PI / 180;
+    endRadians += ((x2 >= x1) ? 90 : -90) * Math.PI / 180;
     this.ctx.save();
     this.ctx.beginPath();
     this.ctx.translate(x2, y2);
     this.ctx.rotate(endRadians);
     this.ctx.moveTo(0, 0);
-    this.ctx.lineTo(5, 20);
-    this.ctx.lineTo(-5, 20);
+    this.ctx.lineTo(5, 15);
+    this.ctx.lineTo(-5, 15);
     this.ctx.closePath();
     this.ctx.fill();
     this.ctx.restore();
