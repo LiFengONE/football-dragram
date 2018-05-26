@@ -57,8 +57,6 @@ export default class Icon{
         }
         break;
       case 'halfRing':
-        //this.width = 12;
-        //this.height = 12;
         this.ctx.beginPath();
         this.ctx.arc(0,0,10,0,Math.PI * 2,false);
         this.ctx.closePath();
@@ -95,23 +93,30 @@ export default class Icon{
         }
         break;
       case 'halfTriangle':
-        //this.width = 20;
-        //this.height = 20;
         this.ctx.beginPath();
-        this.ctx.moveTo(0, -10 );
-        this.ctx.lineTo( - 10, 10);
-        this.ctx.lineTo( 10, 10);
+        this.ctx.arc(0,0,10,0,Math.PI * 2,false);
         this.ctx.closePath();
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.moveTo(0,-10);
-        this.ctx.lineTo( -3, -4);
-        this.ctx.lineTo( 3, -4);
+        this.ctx.arc(0,0,7,0,Math.PI * 2,false);
+        this.ctx.arc(0,0,10,Math.PI / 4 * 5,Math.PI / 4 * 7,false);
         this.ctx.closePath();
-        this.ctx.fillStyle = 'black';
-        this.ctx.fill();
         this.ctx.fillStyle = 'white';
+        this.ctx.lineWidth = 3;
+        this.ctx.fill();
+        this.ctx.strokeStyle = this.color;
+        this.ctx.beginPath();
+        this.ctx.moveTo(0,0);
+        this.ctx.lineTo( -7, -7);
+        this.ctx.closePath();
+        this.ctx.stroke();
+        this.ctx.beginPath();
+        this.ctx.moveTo(0,0);
+        this.ctx.lineTo( 7, -7);
+        this.ctx.closePath();
+        this.ctx.stroke();
+        this.ctx.fillStyle = 'black';
         this.ctx.font = "bold 28px"; //字体样式
         if(this.text.length === 1){
           this.ctx.fillText(this.text,  - 4 ,  6);

@@ -758,11 +758,12 @@
         <div class="tool-select-two move">
           <span id="halfTriangle" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
             <template v-if="graph !== 'halfTriangle'">
-               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-              <title>ussf-triangle-player</title>
-              <path :fill="color[playersColor]" d="M32 32l-12-24h-8l-12 24h32z"></path>
-              <path fill="#000" d="M16 0l-4 8h8l-4-8z"></path>
-            </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="20" height="20" viewBox="0 0 1024 1024">
+                <g id="icomoon-ignore"></g>
+                <path :stroke="theTool === 'halfTriangle' ? 'white' : color[playersColor]" :fill="theTool === 'halfTriangle' ? '#45d695' : 'white'" stroke-width="150" stroke-miterlimit="10" stroke-linecap="butt" stroke-linejoin="miter" d="M813.387 144.624c79.671 78.174 129.056 186.977 129.056 307.32 0 237.72-192.716 430.443-430.443 430.443s-430.443-192.716-430.443-430.443c0-118.872 48.175-226.472 126.080-304.374v0"></path>
+                <path :stroke="theTool === 'halfTriangle' ? 'white' : color[playersColor]" :fill="theTool === 'halfTriangle' ? '#45d695' : 'white'" stroke-width="150" stroke-miterlimit="10" stroke-linecap="butt" stroke-linejoin="miter" d="M509.019 448.64l307.027-307.027"></path>
+                <path :stroke="theTool === 'halfTriangle' ? 'white' : color[playersColor]" :fill="theTool === 'halfTriangle' ? '#45d695' : 'white'" stroke-width="150" stroke-miterlimit="10" stroke-linecap="butt" stroke-linejoin="miter" d="M509.019 448.64l-301.008-301.008"></path>
+              </svg>
             </template>
           </span>
           <span id="halfCircular" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
