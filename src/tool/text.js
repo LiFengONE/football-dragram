@@ -14,7 +14,7 @@ export default class Text{
     this.ctx.save();
     this.ctx.translate(this.pos.x,this.pos.y);
     this.ctx.rotate(this.angle);
-    this.ctx.font = "bold 40px";
+    this.ctx.font = "900 SimHei"; //字体样式
     this.ctx.fillStyle = 'black';
     this.ctx.fillText(this.text,- this.width / 2, - this.height / 2 + 13);
     this.ctx.restore();

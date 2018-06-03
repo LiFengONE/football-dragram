@@ -5,10 +5,10 @@
       <span>Pick your theme</span>
     </div>
     <div class="choice">
-      <router-link to="/coach">
+      <router-link to="/pitch/coach">
         <img class="coaching" src="../assets/coach.png">
       </router-link>
-      <router-link to="/standard">
+      <router-link to="/pitch/standard">
         <img class="federation" src="../assets/standard.png">
       </router-link>
     </div>

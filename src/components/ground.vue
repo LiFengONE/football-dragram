@@ -1,6 +1,6 @@
 <template>
   <div id="ground" ref="ground" :class="type === 'coach' ? 'coachBg' : 'standardBg'">
-    <div :class="['field', type === 'coach' ? hasGrid ? 'hasGrid1' : 'noGrid1' : hasGrid ? 'hasGrid2' : 'noGrid2', type === 'coach' ? 'coachFieldBorder' : 'standardFieldBorder']" ref="field">
+    <div :class="['field',type === 'coach' ? 'coachFieldBorder' : 'standardFieldBorder']" ref="field">
       <canvas id="canvas" ref="canvas" width="1000px" height="563px" @mousedown="canvasDown($event)"  @mousemove="canvasMove($event)" @mouseup="canvasUp($event)" @dragover="dragOver($event)" @drop="dragFinished($event)"></canvas>
       <input type="text" id="inputText" :class="type === 'coach' ? 'coachInputBorder' : 'standardInputBorder'" ref="inputText">
     </div>
@@ -28,7 +28,8 @@
         },
         mouseDown: false,
         mouseEnter:false,
-        stack:[],
+        playerStack: [],
+        otherStack:[],
         imgWrap:[],
         obj:{},
         selectObj:{},
@@ -38,7 +39,7 @@
         edgeColor:''
       }
     },
-    props:['type'],
+    props:['type','index'],
     computed:{
       tool(){
         return this.$store.state.tool;
@@ -98,19 +99,23 @@
         this.start = this.end = this.canvasMousePos(canvas,event);
         this.mouseDown = true;
         let ctx = canvas.getContext("2d");
-        let stack = this.stack;
         ctx.clearRect(0, 0, this.width, this.height);
         if(this.tool === 'polygon'){
           if(JSON.stringify(this.polygonObj) === "{}"){
             let selectionColor = this.color[this.shapesColor];
             this.polygonObj = new Polygon(ctx,[[this.start.x,this.start.y]],[],selectionColor,this.edgeColor);
-            console.log(this.polygonObj)
           }
         }else {
           this.polygonObj = {};
         }
         let arr = [];
-        for(let obj of stack){
+        for(let obj of this.otherStack){
+          obj.draw();
+          if(obj.inRange(this.start.x,this.start.y)){
+            arr.push(obj);
+          }
+        }
+        for(let obj of this.playerStack){
           obj.draw();
           if(obj.inRange(this.start.x,this.start.y)){
             arr.push(obj);
@@ -210,25 +215,25 @@
             if(tool === 'square' || tool === 'rectangle' || tool === 'circular' || tool === 'reTriangle'){
               let selectionColor = this.color[this.shapesColor];
               this.obj = new Selection(ctx,tool,this.start,this.end,selectionColor,this.edgeColor);
+              this.reDraw();
               this.obj.draw();
               this.obj.drawEdges();
-              this.reDraw();
             }else if(tool === 'ruler'){
               let selectionColor = this.color[this.shapesColor];
               this.obj = new Line(ctx,tool,this.start,this.end,selectionColor,this.edgeColor);
+              this.reDraw();
               this.obj.draw();
               this.obj.drawEdges();
-              this.reDraw();
             } else if(tool === 'solidArrowLine' || tool === 'dottedArrowLine' || tool === 'waveLine' || tool === 'dottedLine'){
               let lineColor = this.color[this.linesColor];
               this.obj = new Line(ctx,tool,this.start,this.end,lineColor,this.edgeColor);
+              this.reDraw();
               this.obj.draw();
               this.obj.drawEdges();
-              this.reDraw();
             }else if(tool === 'polygon'){
               this.polygonObj.next = [this.end.x,this.end.y];
-              this.polygonObj.draw();
               this.reDraw();
+              this.polygonObj.draw();
             }
           }else if(JSON.stringify(this.selectObj) !== "{}"){
             this.end = this.canvasMousePos(canvas,event);
@@ -238,8 +243,8 @@
               this.selectObj.move(this.end.x,this.end.y);
             }
             ctx.clearRect(0, 0, this.width, this.height);
-            this.selectObj.drawEdges();
             this.reDraw();
+            this.selectObj.drawEdges();
           }
         }
       },
@@ -250,7 +255,7 @@
           let diffY = Math.abs(this.end.y - this.start.y);
           let len = Math.sqrt(diffX * diffX + diffY * diffY);
           if( ((this.obj.type === 'rectangle' || this.obj.type === 'circular') && (diffX > 40 || diffY > 40)) || ((this.obj.type === 'square' || this.obj.type === 'reTriangle') && (diffX > 40 && diffY > 40)) || (this.obj instanceof Line && len > 60)){
-            this.stack.push(this.obj);
+            this.otherStack.push(this.obj);
           }else {
             this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
             this.reDraw();
@@ -268,7 +273,7 @@
           let len = Math.sqrt(Math.pow(this.polygonObj.next[0] - this.polygonObj.points[0][0] , 2)  + Math.pow(this.polygonObj.next[1] - this.polygonObj.points[0][1] , 2));
           if(len < 10){
             this.polygonObj.finish = true;
-            this.stack.push(this.polygonObj);
+            this.otherStack.push(this.polygonObj);
             this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
             this.reDraw();
             this.polygonObj.drawEdges();
@@ -348,10 +353,10 @@
           }
           this.obj = new Graph(ctx,tool,img,this.end,this.edgeColor);
           ctx.clearRect(0, 0, this.width, this.height);
+          this.reDraw();
           this.obj.draw();
           this.obj.drawEdges();
-          this.reDraw();
-          this.stack.push(this.obj);
+          this.otherStack.push(this.obj);
           this.selectObj = this.obj;
           this.$store.commit('changeSelectState',true);
           this.$store.commit('changePlayerTextState',false);
@@ -375,10 +380,10 @@
             this.$store.commit('setText','');
           }
           ctx.clearRect(0, 0, this.width, this.height);
+          this.reDraw();
           this.obj.draw();
           this.obj.drawEdges();
-          this.reDraw();
-          this.stack.push(this.obj);
+          this.playerStack.push(this.obj);
           this.selectObj = this.obj;
           this.$store.commit('changeSelectState',true);
           this.obj = {};
@@ -397,12 +402,11 @@
               this.inputText.parentNode.style.position = '';
               this.obj = new Text(ctx,text,this.end,this.edgeColor);
               ctx.clearRect(0, 0, this.width, this.height);
+              this.reDraw();
               this.obj.draw();
               this.obj.drawEdges();
-              this.reDraw();
-              this.stack.push(this.obj);
+              this.otherStack.push(this.obj);
               this.selectObj = this.obj;
-              console.log(this.selectObj);
               this.$store.commit('changeSelectState',true);
               this.$store.commit('changePlayerTextState',false);
               this.obj = {};
@@ -412,10 +416,12 @@
         }
       },
       reDraw(){
-        let stack = this.stack;
-          for(let obj of stack){
-              obj.draw();
-          }
+        for(let obj of this.otherStack){
+          obj.draw();
+        }
+        for(let obj of this.playerStack){
+          obj.draw();
+        }
       },
       downImg() {
         html2canvas( this.field, {
@@ -436,13 +442,19 @@
         this.downImg();
       },
       toClear(){
-        this.stack = [];
+        this.otherStack = [];
+        this.playerStack = [];
         this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
         this.reDraw();
       },
       toDelete(){
-        let index = this.stack.indexOf(this.selectObj);
-        this.stack.splice(index,1);
+        let index1 = this.otherStack.indexOf(this.selectObj);
+        let index2 = this.playerStack.indexOf(this.selectObj);
+        if(index1 > -1){
+          this.otherStack.splice(index1,1);
+        }else if(index2 > -1){
+          this.playerStack.splice(index2,1);
+        }
         this.selectObj = {};
         this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
         this.reDraw();
@@ -450,15 +462,22 @@
       toRotate(){
         this.selectObj.rotateSelf();
         this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
-        this.selectObj.drawEdges();
         this.reDraw();
+        this.selectObj.drawEdges();
       },
       text(){
         if(this.selectObj instanceof Icon || (this.selectObj instanceof Line && this.selectObj.type === 'ruler')){
           this.selectObj.text = this.text;
           this.canvas.getContext("2d").clearRect(0, 0, this.width, this.height);
-          this.selectObj.drawEdges();
           this.reDraw();
+          this.selectObj.drawEdges();
+        }
+      },
+      hasGrid(){
+        if(this.hasGrid){
+          this.$refs.field.style.backgroundImage = `url(/static/img/${this.type}BgGrid${this.index}.png)`
+        }else {
+          this.$refs.field.style.backgroundImage = `url(/static/img/${this.type}Bg${this.index}.png)`
         }
       }
     },
@@ -596,6 +615,42 @@
         this.imgArr[i].src = DOMURL.createObjectURL(svg);
       }
       this.edgeColor = this.type === 'coach' ? 'rgb(69, 214, 149)' : 'white';
+      this.$refs.field.style.backgroundImage = `url(/static/img/${this.type}Bg${this.index}.png)`;
+      let index = parseInt(this.index);
+      if(index === 1){
+        this.$refs.field.style.backgroundSize = '320px 480px';
+        this.$refs.field.style.backgroundPosition = '340px 41px';
+      }else if(index === 2){
+        this.$refs.field.style.backgroundSize = '750px 500px';
+        this.$refs.field.style.backgroundPosition = '125px 31px';
+      }else if(index === 3 || index === 4){
+        this.$refs.field.style.backgroundSize = '400px 480px';
+        this.$refs.field.style.backgroundPosition = '300px 41px';
+      }else if(index === 5){
+        this.$refs.field.style.backgroundSize = '560px 480px';
+        this.$refs.field.style.backgroundPosition = '220px 41px';
+      }else if(index === 6 || index === 7){
+        this.$refs.field.style.backgroundSize = '518px 480px';
+        this.$refs.field.style.backgroundPosition = '241px 41px';
+      }else if(index === 8){
+        this.$refs.field.style.backgroundSize = '442px 480px';
+        this.$refs.field.style.backgroundPosition = '279px 41px';
+      }else if(index === 9 || index === 10 || index === 11 || index === 16){
+        this.$refs.field.style.backgroundSize = '880px 450px';
+        this.$refs.field.style.backgroundPosition = '60px 54px';
+      }else if(index === 12){
+        this.$refs.field.style.backgroundSize = '460px 500px';
+        this.$refs.field.style.backgroundPosition = '270px 31px';
+      }else if(index === 13 || index === 14 || index === 15){
+        this.$refs.field.style.backgroundSize = '500px 500px';
+        this.$refs.field.style.backgroundPosition = '250px 31px';
+      }else if(index === 17){
+        this.$refs.field.style.backgroundSize = '290px 480px';
+        this.$refs.field.style.backgroundPosition = '355px 41px';
+      }else if(index === 18){
+        this.$refs.field.style.backgroundSize = '750px 450px';
+        this.$refs.field.style.backgroundPosition = '125px 54px';
+      }
     }
   }
 </script>
@@ -634,27 +689,13 @@
     width: 1000px;
     height: 563px;
     background-repeat: no-repeat;
-    background-size: 750px 500px;
-    background-position: 125px 31px;
-    border: dashed 2px rgb(69, 214, 149) ;
+    background-size: auto;
   }
   .coachFieldBorder{
     border: dashed 2px rgb(69, 214, 149) ;
   }
   .standardFieldBorder{
     border: dashed 2px white ;
-  }
-  .hasGrid1{
-    background-image: url("../assets/footballField2.png");
-  }
-  .noGrid1{
-    background-image: url("../assets/footballField.png");
-  }
-  .hasGrid2{
-    background-image: url("../assets/footballField4.png");
-  }
-  .noGrid2{
-    background-image: url("../assets/footballField3.png");
   }
   #canvas{
     width: 1000px;

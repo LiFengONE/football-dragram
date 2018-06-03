@@ -14,13 +14,13 @@
     </div>
     <div class="operation">
       <template v-if="! isSelected">
-        <div class="clear">
+        <div class="clear" @mouseenter="enter" @mouseleave="leave">
           <div class="theIcon" @click="clearCanvas">
             <svg class="icon icon-M fill-undefined undefined">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-delete-all">
+              <use xlink:href="#icon-delete-all">
                 <svg id="icon-delete-all" viewBox="0 0 32 32" width="100%" height="100%">
                   <title>delete-all</title>
-                  <path d="M8 25.333c0 1.467 1.2 2.667 2.667 2.667h10.667c1.467 0 2.667-1.2 2.667-2.667v-16h-16v16zM25.333 5.333h-4.667l-1.333-1.333h-6.667l-1.333 1.333h-4.667v2.667h18.667v-2.667z"></path>
+                  <path :fill="svgColor" d="M8 25.333c0 1.467 1.2 2.667 2.667 2.667h10.667c1.467 0 2.667-1.2 2.667-2.667v-16h-16v16zM25.333 5.333h-4.667l-1.333-1.333h-6.667l-1.333 1.333h-4.667v2.667h18.667v-2.667z"></path>
                 </svg>
               </use>
             </svg>
@@ -56,13 +56,13 @@
         </div>
       </template>
       <template v-else="isSelected">
-        <div class="clear">
+        <div class="clear" @mouseenter="enter" @mouseleave="leave">
           <div class="theIcon" @click="deleteObj">
             <svg class="icon icon-M fill-undefined undefined">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-remove-circle-outline">
                 <svg id="icon-remove-circle-outline" viewBox="0 0 32 32" width="100%" height="100%">
                   <title>remove-circle-outline</title>
-                  <path d="M9.333 14.667v2.667h13.333v-2.667h-13.333zM16 2.667c-7.36 0-13.333 5.973-13.333 13.333s5.973 13.333 13.333 13.333 13.333-5.973 13.333-13.333-5.973-13.333-13.333-13.333zM16 26.667c-5.88 0-10.667-4.787-10.667-10.667s4.787-10.667 10.667-10.667 10.667 4.787 10.667 10.667-4.787 10.667-10.667 10.667z"></path>
+                  <path :fill="svgColor" d="M9.333 14.667v2.667h13.333v-2.667h-13.333zM16 2.667c-7.36 0-13.333 5.973-13.333 13.333s5.973 13.333 13.333 13.333 13.333-5.973 13.333-13.333-5.973-13.333-13.333-13.333zM16 26.667c-5.88 0-10.667-4.787-10.667-10.667s4.787-10.667 10.667-10.667 10.667 4.787 10.667 10.667-4.787 10.667-10.667 10.667z"></path>
                 </svg>
               </use>
             </svg>
@@ -100,6 +100,7 @@
     data () {
       return {
         hasBorder:false,
+        svgColor:'black'
       }
     },
     computed:{
@@ -148,6 +149,12 @@
       },
       goBack(){
         this.$router.goBack();
+      },
+      enter(){
+        this.svgColor = '#d1495b'
+      },
+      leave(){
+        this.svgColor = 'black';
       }
     }
   }

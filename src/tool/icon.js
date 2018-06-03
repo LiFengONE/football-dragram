@@ -46,12 +46,11 @@ export default class Icon{
         this.ctx.beginPath();
         this.ctx.arc(0,0,7,0,Math.PI * 2,false);
         this.ctx.closePath();
-        this.ctx.fillStyle = 'white';
+        this.ctx.fillStyle = this.edgeColor === 'white' ? 'rgb(166, 206, 147)' : 'white';
         this.ctx.fill();
-        this.ctx.fillStyle = 'black';
         this.ctx.font = "bold 28px"; //字体样式
         if(this.text.length === 1){
-          this.ctx.fillText(this.text,  - 4 ,  4);
+          this.ctx.fillText(this.text,  - 3 ,  4);
         }else {
           this.ctx.fillText(this.text,  - 6 ,  4);
         }
@@ -64,9 +63,9 @@ export default class Icon{
         this.ctx.fill();
         this.ctx.beginPath();
         this.ctx.arc(0,0,7,0,Math.PI * 2,false);
-        this.ctx.arc(0,0,10,Math.PI / 3,Math.PI * 2 / 3,false);
+        this.ctx.arc(0,0,11,Math.PI / 3,Math.PI * 2 / 3,false);
         this.ctx.closePath();
-        this.ctx.fillStyle = 'white';
+        this.ctx.fillStyle = this.edgeColor === 'white' ? 'rgb(166, 206, 147)' : 'white';
         this.ctx.fill();
         this.ctx.beginPath();
         this.ctx.moveTo( - 3.5,  6);
@@ -87,9 +86,9 @@ export default class Icon{
         this.ctx.fillStyle = 'black';
         this.ctx.font = "bold 28px"; //字体样式
         if(this.text.length === 1){
-          this.ctx.fillText(this.text,  - 4 ,  4);
+          this.ctx.fillText(this.text,  -3.2 , 4);
         }else {
-          this.ctx.fillText(this.text,  - 6 ,  5);
+          this.ctx.fillText(this.text,  - 6 ,  4);
         }
         break;
       case 'halfTriangle':
@@ -100,26 +99,26 @@ export default class Icon{
         this.ctx.fill();
         this.ctx.beginPath();
         this.ctx.arc(0,0,7,0,Math.PI * 2,false);
-        this.ctx.arc(0,0,10,Math.PI / 4 * 5,Math.PI / 4 * 7,false);
+        this.ctx.arc(0,0,11,Math.PI / 4 * 5,Math.PI / 4 * 7,false);
         this.ctx.closePath();
-        this.ctx.fillStyle = 'white';
-        this.ctx.lineWidth = 3;
+        this.ctx.fillStyle = this.edgeColor === 'white' ? 'rgb(166, 206, 147)' : 'white';
         this.ctx.fill();
         this.ctx.strokeStyle = this.color;
+        this.ctx.lineWidth = 3;
         this.ctx.beginPath();
-        this.ctx.moveTo(0,0);
+        this.ctx.moveTo(0,-3);
         this.ctx.lineTo( -7, -7);
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.beginPath();
-        this.ctx.moveTo(0,0);
+        this.ctx.moveTo(0,-3);
         this.ctx.lineTo( 7, -7);
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.fillStyle = 'black';
-        this.ctx.font = "bold 28px"; //字体样式
+        this.ctx.font = "900 28px SimHei"; //字体样式
         if(this.text.length === 1){
-          this.ctx.fillText(this.text,  - 4 ,  6);
+          this.ctx.fillText(this.text,  - 3 ,  6);
         }else {
           this.ctx.fillText(this.text,  - 6 ,  5);
         }

@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import index from '../components/index.vue'
-import coach from '../components/coach.vue'
-import standard from '../components/standard.vue'
+import diagram from '../components/diagram.vue'
+import pitch from '../components/pitch.vue'
 
 Router.prototype.goBack = function () {
   this.isBack = true;
@@ -19,15 +19,15 @@ export default new Router({
       component: index,
     },
     {
-      path: '/coach',
-      name: 'coach',
-      component: coach,
+      path: '/pitch/:type',
+      name: 'pitch',
+      component: pitch,
     },
     {
-      path: '/standard',
-      name: 'standard',
-      component: standard,
-    }
+      path: '/diagram/:type/:index',
+      name: 'diagram',
+      component: diagram,
+    },
   ],
   mode: 'history'
 })
