@@ -48,7 +48,8 @@ export default class Icon{
         this.ctx.closePath();
         this.ctx.fillStyle = this.edgeColor === 'white' ? 'rgb(166, 206, 147)' : 'white';
         this.ctx.fill();
-        this.ctx.font = "bold 28px"; //字体样式
+        this.ctx.fillStyle = 'black';
+        this.ctx.font = "900 SimHei";
         if(this.text.length === 1){
           this.ctx.fillText(this.text,  - 3 ,  4);
         }else {
@@ -116,7 +117,7 @@ export default class Icon{
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.fillStyle = 'black';
-        this.ctx.font = "900 28px SimHei"; //字体样式
+        this.ctx.font = "900 SimHei"; //字体样式
         if(this.text.length === 1){
           this.ctx.fillText(this.text,  - 3 ,  6);
         }else {
