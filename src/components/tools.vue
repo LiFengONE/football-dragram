@@ -200,26 +200,20 @@
             </svg>
           </span>
         </div>
-        <div class="tool-select-three hand">
-          <span id="polygon" :class="theTool === 'polygon' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">
+        <div class="tool-select-three-two hand">
+          <span id="polygon" :class="['polygon',theTool === 'polygon' ? 'bgGreen' : 'bgWhite']" @click.stop="changeTool($event)">
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="32" height="32" viewBox="0 0 1697 1024">
               <g id="icomoon-ignore"> </g>
               <path :stroke="theTool === 'polygon' ? 'white' : color[shapesColor]" :fill="theTool === 'polygon' ? '#45d695' : 'white'" stroke-width="100" stroke-miterlimit="10" stroke-linecap="butt" stroke-linejoin="miter" d="M519.589 18.286h667.429l484.571 493.714-493.714 493.714h-658.286l-493.714-493.714 493.714-493.714z"></path>
             </svg>
           </span>
-          <span id="reTriangle" :class="theTool === 'reTriangle' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">
+          <span id="reTriangle" :class="['polygon',theTool === 'reTriangle' ? 'bgGreen' : 'bgWhite']" @click.stop="changeTool($event)">
             <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="20" height="20" viewBox="0 0 1024 1024">
               <g id="icomoon-ignore"></g>
               <path :stroke="theTool === 'reTriangle' ? 'white' : color[shapesColor]" :fill="theTool === 'reTriangle' ? '#45d695' : 'white'" stroke-width="100" stroke-miterlimit="10" stroke-linecap="butt" stroke-linejoin="miter" d="M506.253 67.211l495.785 889.578-980.076-17.187 484.278-872.391z"></path>
             </svg>
           </span>
-          <span id="ruler" :class="theTool === 'ruler' ? 'bgGreen' : 'bgWhite'" @click.stop="changeTool($event)">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="60" height="60" viewBox="0 0 5178 1024">
-              <g id="icomoon-ignore"></g>
-              <path :fill="theTool === 'ruler' ? 'white' : color[shapesColor]" d="M3277.28 339.925v344.15h1286.038v307.925l452.831-470.944-470.944-489.056 18.113 362.263z"></path>
-              <path :fill="theTool === 'ruler' ? 'white' : color[shapesColor]" d="M1918.793 665.962v-289.812h-1286.038v-344.15l-470.944 489.056 489.056 470.944v-326.038z"></path>
-            </svg>
-          </span>
+          <span class="empty"></span>
         </div>
       </div>
     </div>
@@ -766,15 +760,6 @@
               </svg>
             </template>
           </span>
-          <span id="halfCircular" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
-            <template v-if="graph !== 'halfTriangle'">
-               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
-              <title>ussf-circle-player</title>
-              <path :fill="color[playersColor]" d="M29.84 8h-27.68c-1.358 2.302-2.16 5.071-2.16 8.028 0 8.837 7.163 16 16 16s16-7.163 16-16c0-2.957-0.802-5.727-2.201-8.103l0.041 0.075z"></path>
-              <path fill="#000" d="M16 0c-5.885 0.006-11.025 3.188-13.799 7.925l-0.041 0.075h27.68c-2.815-4.812-7.955-7.994-13.839-8h-0.001z"></path>
-            </svg>
-            </template>
-          </span>
         </div>
       </div>
     </div>
@@ -995,8 +980,8 @@
     <div class="text tool">
       <div class="header" @click="changeTextSwitch">
         <div class="text">
-          <span class="title">Text</span>
-          <span class="description">(drag)</span>
+          <span class="title">Text + Ruler</span>
+          <span class="description">(click + drag)</span>
         </div>
         <div class="fold">
           <svg class="icon icon-M fill-dark undefined">
@@ -1010,7 +995,7 @@
         </div>
       </div>
       <div v-show="textIsOpen">
-        <div class="textIcon">
+        <div class="tool-select-two">
           <span id="text" draggable="true" @dragstart="dragStart($event)" @drag="drag($event)" @dragend="dragEnd($event)">
             <svg class="icon icon-M fill-undefined undefined">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-textbox">
@@ -1019,6 +1004,13 @@
                   <path d="M30.667 9.333v-8h-8v2.667h-13.333v-2.667h-8v8h2.667v13.333h-2.667v8h8v-2.667h13.333v2.667h8v-8h-2.667v-13.333h2.667zM4 4h2.667v2.667h-2.667v-2.667zM6.667 28h-2.667v-2.667h2.667v2.667zM22.667 25.333h-13.333v-2.667h-2.667v-13.333h2.667v-2.667h13.333v2.667h2.667v13.333h-2.667v2.667zM28 28h-2.667v-2.667h2.667v2.667zM25.333 6.667v-2.667h2.667v2.667h-2.667zM18.307 18.667h-4.653l-0.973 2.667h-2.16l4.533-12h1.867l4.547 12h-2.173l-0.987-2.667zM14.253 16.987h3.48l-1.733-5.107-1.747 5.107z"></path>
                 </svg>
               </use>
+            </svg>
+          </span>
+          <span id="ruler" :class="['span-hand',theTool === 'ruler' ? 'bgGreen' : 'bgWhite']" @click.stop="changeTool($event)">
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="60" height="60" viewBox="0 0 5178 1024">
+              <g id="icomoon-ignore"></g>
+              <path :fill="theTool === 'ruler' ? 'white' : 'black'" d="M3277.28 339.925v344.15h1286.038v307.925l452.831-470.944-470.944-489.056 18.113 362.263z"></path>
+              <path :fill="theTool === 'ruler' ? 'white' : 'black'" d="M1918.793 665.962v-289.812h-1286.038v-344.15l-470.944 489.056 489.056 470.944v-326.038z"></path>
             </svg>
           </span>
         </div>
@@ -1105,6 +1097,8 @@
           theTool = ele.id === this.theTool ? '' : ele.id;
         }else if(eleType === 'svg'){
           theTool = ele.parentNode.id === this.theTool ? '' : ele.parentNode.id;
+        }else if(eleType === 'path'){
+          theTool = ele.parentNode.parentNode.id === this.theTool ? '' : ele.parentNode.parentNode.id;
         }
         this.$store.commit('setTool',theTool);
       },
@@ -1166,6 +1160,9 @@
     span{
       cursor:pointer;
     }
+  }
+  .span-hand{
+    cursor:pointer;
   }
   .icon{
     width: 24px;
@@ -1257,6 +1254,30 @@
       }
     }
   }
+  .polygon{
+    border: 1px solid #e7eaef;
+    border-radius: 2px;
+    width: 65px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:hover{
+      border-color: #2f313c;
+      color: #2f313c;
+    }
+  }
+  .empty{
+    width: 65px;
+    height: 36px;
+  }
+  .tool-select-three-two{
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     height: 50px;
+
+   }
   .border{
     border-color: #2f313c;
   }
@@ -1278,24 +1299,6 @@
         border-color: #2f313c;
         color: #2f313c;
       }
-    }
-  }
-  .textIcon{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;
-    span{
-      cursor:move;
-      background-color: #fff;
-      border: 1px solid #e7eaef;
-      border-radius: 2px;
-      color: #2f313c;
-      width: 63px;
-      height: 34px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
   }
 </style>

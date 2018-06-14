@@ -50,11 +50,9 @@ export default class Icon{
         this.ctx.fill();
         this.ctx.fillStyle = 'black';
         this.ctx.font = "900 SimHei";
-        if(this.text.length === 1){
-          this.ctx.fillText(this.text,  - 3 ,  4);
-        }else {
-          this.ctx.fillText(this.text,  - 6 ,  4);
-        }
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+        this.ctx.fillText(this.text,  0 ,  0);
         break;
       case 'halfRing':
         this.ctx.beginPath();
@@ -86,11 +84,11 @@ export default class Icon{
         this.ctx.fill();
         this.ctx.fillStyle = 'black';
         this.ctx.font = "bold 28px"; //字体样式
-        if(this.text.length === 1){
-          this.ctx.fillText(this.text,  -3.2 , 4);
-        }else {
-          this.ctx.fillText(this.text,  - 6 ,  4);
-        }
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+        this.ctx.fillText(this.text,  0 ,  0);
         break;
       case 'halfTriangle':
         this.ctx.beginPath();
@@ -107,44 +105,20 @@ export default class Icon{
         this.ctx.strokeStyle = this.color;
         this.ctx.lineWidth = 3;
         this.ctx.beginPath();
-        this.ctx.moveTo(0,-3);
+        this.ctx.moveTo(0,-4);
         this.ctx.lineTo( -7, -7);
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.beginPath();
-        this.ctx.moveTo(0,-3);
+        this.ctx.moveTo(0,-4);
         this.ctx.lineTo( 7, -7);
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.fillStyle = 'black';
         this.ctx.font = "900 SimHei"; //字体样式
-        if(this.text.length === 1){
-          this.ctx.fillText(this.text,  - 3 ,  6);
-        }else {
-          this.ctx.fillText(this.text,  - 6 ,  5);
-        }
-        break;
-      case 'halfCircular':
-        //this.width = 12;
-        //this.height = 12;
-        this.ctx.beginPath();
-        this.ctx.arc(0,0,10,0,Math.PI * 2,false);
-        this.ctx.closePath();
-        this.ctx.fillStyle = 'black';
-        this.ctx.fill();
-        this.ctx.beginPath();
-        this.ctx.arc(0,0,10,0,Math.PI * 7 / 6,false);
-        this.ctx.arc(0,0,10,Math.PI * 11 / 6,Math.PI * 2,false);
-        this.ctx.closePath();
-        this.ctx.fillStyle = this.color;
-        this.ctx.fill();
-        this.ctx.fillStyle = 'white';
-        this.ctx.font = "bold 28px"; //字体样式
-        if(this.text.length === 1){
-          this.ctx.fillText(this.text,  - 3 ,  6);
-        }else {
-          this.ctx.fillText(this.text,  - 6 ,  5);
-        }
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+        this.ctx.fillText(this.text,  0 ,  0);
         break;
     }
     this.ctx.restore();

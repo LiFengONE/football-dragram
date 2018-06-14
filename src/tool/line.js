@@ -93,20 +93,21 @@ export default class Line{
         this.ctx.restore();
         break;
       case 'ruler':
+        this.ctx.strokeStyle = 'black';
+        this.ctx.fillStyle = 'black';
         this.ctx.beginPath();
         this.ctx.moveTo(0,0);
         this.ctx.lineTo(len / 2 - 15,0);
         this.ctx.moveTo(len / 2 + 15,0);
         this.ctx.lineTo(len,0);
         this.ctx.stroke();
-        if(this.text.length === 1){
-          this.ctx.fillText(this.text,  len / 2 - 2 , 4);
-        }else if(this.text.length === 2){
-          this.ctx.fillText(this.text, len / 2 - 6 , 4);
-        }else if(this.text.length === 2){
-          this.ctx.fillText(this.text, len / 2 - 10 , 4);
-        }
+        this.ctx.fillStyle = 'black';
+        this.ctx.font = "900 SimHei";
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+        this.ctx.fillText(this.text,  len / 2 ,  0);
         this.ctx.restore();
+        this.ctx.fillStyle = 'black';
         this.drawArrow(this.start.x, this.start.y, this.end.x, this.end.y);
         this.drawArrow(this.end.x, this.end.y, this.start.x, this.start.y);
         break;

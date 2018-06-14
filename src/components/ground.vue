@@ -424,7 +424,7 @@
         }
       },
       downImg() {
-        html2canvas( this.field, {
+        html2canvas( this.$refs.ground, {
           onrendered: function(canvas) {
             let url = canvas.toDataURL();
             let a = document.createElement('a');
