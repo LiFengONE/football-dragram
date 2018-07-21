@@ -28,6 +28,5 @@ export default new Router({
       name: 'diagram',
       component: diagram,
     },
-  ],
-  mode: 'history'
+  ]
 })
